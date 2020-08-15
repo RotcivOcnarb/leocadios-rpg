@@ -1,0 +1,166 @@
+<%- include("header.ejs") %>
+    
+	<div class="container w-50">
+	
+		<div class="row justify-content-md-center">
+			<div class="col-md-auto">
+				<h1 class="character-title"><%= character.display_name %></h1>
+			</div>
+		</div>
+		<div class="row justify-content-md-center">
+			<div class="col-md-auto">
+				<h3 class="character-title">Level <%= character.level%></h3>
+			</div>
+			<div class="col-md-auto">
+				<h3 class="character-title">Dinheiro: <%= character.coins%>$</h3>
+			</div>
+		</div>
+		<div class="row justify-content-md-center">
+			<div class="col-md-auto">
+				<img src="/assets/base.png" class="img-fluid"></img>
+			</div>
+			<div class="col-md">
+				<div class="row attribute">
+					Ataque: <%= character.attack%>
+				</div>
+				<div class="row attribute">
+					Defesa: <%= character.defense%>
+				</div>
+				<div class="row attribute">
+					Crítico: <%= Math.floor(character.critic*100)%>%
+				</div>
+				<div class="row attribute">
+					Velocidade: <%= character.velocity%>
+				</div>
+				<div class="row attribute">
+					Versatilidade: <%= character.versatility%>
+				</div>
+				<div class="row attribute">
+					Vitalidade: <%= character.max_health%>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center" >
+			<div class="col-md d-flex justify-content-center exp-counter">
+				Vida: <%= character.health + "/" + character.max_health %>
+			</div>
+			
+		</div>
+		<div class="row justify-content-center" >
+			<div class="col-sm justify-content-center">
+				<div class="progress" style="height:40px">
+					<div 
+						class="progress-bar exp-counter" 
+						role="progressbar" 
+						aria-valuenow="<%= character.health%>" 
+						aria-valuemin="0" 
+						aria-valuemax="<%= character.max_health%>"
+						style="width: <%= Math.floor((character.health/character.max_health)*100)%>%">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center" >
+			<div class="col-md d-flex justify-content-center exp-counter">
+				EXP: <%= character.experience + "/" + character.max_experience %>
+			</div>
+			
+		</div>
+		
+		<div class="progress" style="height:40px">
+			<div 
+				class="progress-bar exp-counter" 
+				role="progressbar" 
+				aria-valuenow="<%= character.experience%>" 
+				aria-valuemin="0" 
+				aria-valuemax="<%= character.max_experience%>"
+				style="width: <%= Math.floor((character.experience/character.max_experience)*100)%>%">
+			</div>
+		</div>
+		
+		<div class="row justify-content-md-center">
+			<div class="col-md-auto">
+				<h3 class="character-title">Itens</h3>
+			</div>
+		</div>
+		
+<!-- TODO: ESCONDER E MOSTRAR AS DIVS DENTRO DO TOOLTIP PRA MONTAR A DESCRIÇÃO DO ITEM BASEADO NELE -->		
+		
+		<div id="tooltip" style="display: none; pointer-events: none;">
+			<div id="t-title" class="row tooltip-row" style="font-size: 24px">
+				[title]
+			</div>
+			<div id="t-description" class="row tooltip-row">
+				[description]
+			</div>
+			<div id="t-item-type" class="row tooltip-row">
+				[item-type]
+			</div>
+			<div id="t-command" class="row tooltip-row">
+				[command]
+			</div>
+		</div>
+		
+		<script>		
+		
+			function mouseEnter(){
+				$("#tooltip").show();
+			}
+			
+			function mouseExit(){
+				$("#tooltip").hide();
+			}
+		
+			function mouseMove(event, obj, item){
+				
+				$("#tooltip").css({ 
+					position: "absolute",
+					marginLeft: 0, marginTop: 0,
+					left: event.pageX + 30,
+					top: event.pageY - 200
+				}).appendTo('body');
+				
+				let type = "";
+				switch(obj.type){
+					case "consumable":
+						type = "Consumível";
+					break;
+				}
+				
+				$("#t-title").html(obj.display_name);
+				$("#t-description").html(obj.description);
+				$("#t-item-type").html(type);
+				$("#t-command").html(">item " + item);
+			}
+			
+			function turnOn(selector){
+				$(selector).css({
+					display: "none"
+				});
+			}
+			
+		</script>
+		
+		<!-- GRID SQUARE -->
+		
+		<div class="row justify-content-center" style="margin: 20px;">
+		
+			<% for(var i in Object.keys(character.inventory)){ 
+				let k = Object.keys(character.inventory)[i];
+
+				let item = items[k];
+				let stack = character.inventory[k].stack;
+				%>
+				<img src="<%= item.thumbnail %>" class="col-md-1 square img-fluid" style="border: 1px solid white;" onmousemove='mouseMove(event, <%=JSON.stringify(item)%>, "<%=k%>")' onmouseenter="mouseEnter()" onmouseleave="mouseExit()">
+					<span class = "exp-counter" style="position: relative; left: -20px; pointer-events: none;">
+						<%= stack%>
+					</span>
+				</img>
+			<% } %>
+		
+		</div>
+	</div>
+	
+<%- include("footer.ejs") %>

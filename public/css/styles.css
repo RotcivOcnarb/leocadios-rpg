@@ -1,0 +1,56 @@
+.page{
+	background-color: #160212;
+	color: #fff;
+}
+
+.character-title{
+	padding: 20px
+}
+
+.square:before{
+	border: 1px solid white;
+    content: "";
+    display: block;
+    padding-top: 100%;  /* initial ratio of 1:1*/
+}
+
+.square{
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+
+.grid-row{
+	width: auto;
+}
+
+.exp-counter{
+	font-size: 24px;
+}
+
+#tooltip{
+	position: absolute;
+	
+}
+
+.tooltip-row{
+	color: rgb(28, 133, 202);
+	background-color: #FFF;
+	padding: 7px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin: 0;
+	pointer-events: none;
+	border: 1px solid black;
+	border-radius: 5px;
+	
+}
+
+.attribute{
+	color: rgb(28, 133, 202);
+	background-color: #FFF;
+	padding: 7px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin: 0;
+	border: 1px solid black;
+	border-radius: 5px;

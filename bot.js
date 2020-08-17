@@ -13,7 +13,7 @@ let lastTutorialMessage = 0;
 
 let REVIVER_REWARD = "39f8f088-4456-4785-96bb-72e9cc5b8f69";
 
-
+const client;
 
 function init(environment){
 	
@@ -29,7 +29,7 @@ function init(environment){
 	};
 
 	// Create a client with our options
-	const client = new tmi.client(opts);
+	client = new tmi.client(opts);
 	client.say_2 = client.say;
 	client.say = function(channel, message){
 		console.log("-> " + message + "\n--");

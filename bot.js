@@ -190,7 +190,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	if(msg == ">personagem"){
 
 		if(character){
-			client.say(channel, "Para ver os status do personagem de "+display_name+", acesse esse link: https://leocadios-rpg.herokuapp.com?id=" + context["user-id"]);
+			client.say(channel, "Para ver os status do personagem de "+display_name+", acesse esse link: https://leocadios-rpg.herokuapp.com/?id=" + context["user-id"]);
 		}
 		else{
 			client.say(channel, "Não conseguimos encontrar o seu personagem, para criar um novo personagem use o comando >criar personagem");

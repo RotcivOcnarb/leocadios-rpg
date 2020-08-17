@@ -99,7 +99,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	if(self && msg == ">botid") console.log(JSON.stringify(context, null, 2));
 	if (self) { return; } // Ignore messages from the bot
 	
-	let broadcaster = (context.badges && context.badges.broadcaster == "1");
+	let moderator = context.mod || (context.badges && context.badges.broadcaster == "1");
   
 	lastActivity[context["user-id"]] = Date.now();
 	
@@ -111,7 +111,7 @@ async function onMessageHandler (channel, context, msg, self) {
 		console.log(JSON.stringify(context, null, 2));
 	}
 	
-	if(context.mod || broadcaster){
+	if(moderator){
 		let allCharacters = database.getAllCharacters();
 		
 		if(msg.startsWith(">deletar")){
@@ -173,7 +173,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	let display_name = context['display-name'];
   	  
 	if(msg == ">criar personagem"){
-		if(database.createNewCharacter(context["user-id"], context.subscriber, broadcaster)){
+		if(database.createNewCharacter(context["user-id"], context.subscriber, moderator)){
 			client.say(channel, `Personagem de ${display_name} criado com sucesso! Bem-vindo ao RPG do Gui Leocádio!`);
 		}
 		else{

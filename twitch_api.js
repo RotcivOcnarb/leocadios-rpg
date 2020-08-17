@@ -6,6 +6,8 @@ let access_token = "";
 
 request_access_token(function(access_token){
 	getLiveViewCount(() => {});
+	//getBotID();
+	
 });
 
 function getLiveViewCount(callback){
@@ -40,6 +42,31 @@ function request_access_token(callback){
 			let json = JSON.parse(body);
 			access_token = json["access_token"];
 			callback(json["access_token"]);
+		});
+	});
+
+	req.end();
+
+	req.on('error', function(e) {
+	  console.error(e);
+	});
+}
+
+function getBotID(){
+	
+	let req = https.request({
+		host: "api.twitch.tv",
+		path: "/helix/users?login=RotsBots",
+		method: "GET",
+		headers: {"Client-ID": "mfko21ti9vhpzbpkgbb7lse4yxl7cu", "Authorization": "Bearer " + access_token}
+	}, function(response){
+		let body = "";
+		response.on('data', (d) => {
+			body += d;
+		});
+		response.on('end', () => {
+			let json = JSON.parse(body);
+			console.log(JSON.stringify(json, null, 2));
 		});
 	});
 

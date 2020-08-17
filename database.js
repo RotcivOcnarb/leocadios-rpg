@@ -24,15 +24,16 @@ let exp = {
 	"saveDatabase": function(){
 		fs.writeFile("database.json", JSON.stringify(allCharacters), "utf8", (err) => {
 			if (err) return console.log(err);
-			console.log("Database Saved");
 		});
 	},
 
-	"createNewCharacter": function (twitch_id){
+	"createNewCharacter": function (twitch_id, sub, mod){
 		
 		if(!exp.retrieveCharacterData(twitch_id)){
 			//CRIA UM PERSONAGEM NOVO
 			allCharacters[twitch_id] = new Character(twitch_id);
+			allCharacters[twitch_id].sub = sub;
+			allCharacters[twitch_id].mod = mod;
 			exp.saveDatabase();
 			return true; //Código pra sucesso
 		}

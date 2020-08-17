@@ -1,6 +1,6 @@
 <%- include("header.ejs") %>
     
-	<div class="container w-50">
+	<div class="container w-75">
 	
 		<div class="row justify-content-md-center">
 			<div class="col-md-auto">
@@ -8,42 +8,173 @@
 			</div>
 		</div>
 		<div class="row justify-content-md-center">
-			<div class="col-md-auto">
+			<div class="col-md-auto  my-auto">
 				<h3 class="character-title">Level <%= character.level%></h3>
 			</div>
-			<div class="col-md-auto">
-				<h3 class="character-title">Dinheiro: <%= character.coins%>$</h3>
-			</div>
+			
 		</div>
-		<div class="row justify-content-md-center">
-			<div class="col-md-auto">
-				<img src="/assets/base.png" class="img-fluid"></img>
+		<div class="row justify-content-md-center"> <!-- Row do personagem completo --->
+			<div class="col-md-auto"> <!-- Col dos equipamentos -->
+				<span class="slot-name">Cabeça</span>
+				<div class="slot-square">
+					<%if(character.head) {%>
+						<img src="<%= items[character.head].thumbnail%>" class="img-fluid pix" style="width:100%; height:100%;"
+						onmouseenter="mouseEnter()" onmouseleave="mouseExit()"
+						onmousemove='mouseMove(event, <%=JSON.stringify(items[character.head])%>, "<%=character.head%>")'></img>
+					<%}%>
+				</div>
+				<span class="slot-name">Torso</span>
+				<div class="slot-square">
+					<%if(character.torso) {%>
+						<img src="<%= items[character.torso].thumbnail%>" class="img-fluid pix" style="width:100%; height:100%;"
+						onmouseenter="mouseEnter()" onmouseleave="mouseExit()"
+						onmousemove='mouseMove(event, <%=JSON.stringify(items[character.torso])%>, "<%=character.torso%>")'></img>
+					<%}%>
+				</div>
+				<span class="slot-name">Calças</span>
+				<div class="slot-square">
+					<%if(character.pants) {%>
+						<img src="<%= items[character.pants].thumbnail%>" class="img-fluid pix" style="width:100%; height:100%;"
+						onmouseenter="mouseEnter()" onmouseleave="mouseExit()"
+						onmousemove='mouseMove(event, <%=JSON.stringify(items[character.pants])%>, "<%=character.pants%>")'></img>
+					<%}%>
+				</div>
+				<span class="slot-name">Sapato</span>
+				<div class="slot-square">
+				
+					
+					<%if(character.shoes) {%>
+						<img src="<%= items[character.shoes].thumbnail%>" class="img-fluid pix" style="width:100%; height:100%;"
+						onmouseenter="mouseEnter()" onmouseleave="mouseExit()"
+						onmousemove='mouseMove(event, <%=JSON.stringify(items[character.shoes])%>, "<%=character.shoes%>")'></img>
+					<%}%>
+				</div>
 			</div>
-			<div class="col-md">
-				<div class="row attribute">
-					Ataque: <%= character.attack%>
+			<div class="col-md-auto">
+				<div class="row">
+				
+					<div class="col-md-auto my-auto" style="position: relative">
+						<img src = "/assets/base.png" class="img-fluid pix" ></img>
+					</div>
+					
+					<div id="base-visu" style="position: absolute">
+						<!-- Imagem base do personagem -->
+						<!-- <img src="/assets/base.png" class="img-fluid" ></img> -->
+						<img src = "/assets/cabeca_base.png" class="img-fluid pix base-render cabeca"></img>
+						<img src = "/assets/corpo_base.png" class="img-fluid pix base-render corpo"></img>
+						<img src = "/assets/pe_base.png" class="img-fluid pix base-render pe"></img>
+						<img src = "/assets/pernas_base.png" class="img-fluid pix base-render pernas"></img>
+						
+						<div>
+							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render cabeca-1"
+							style="opacity: 0"></img>
+							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render corpo-1"
+							style="opacity: 0"></img>
+							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render pe-1"
+							style="opacity: 0"></img>
+							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render pernas-1" 
+							style="opacity: 0"></img>
+							
+							<script>
+							
+							setInterval(function(){
+													
+							<% if(character.head){%>
+								$(".cabeca-1").attr("src","<%=items[character.head].thumbnail%>");
+								$(".cabeca-1").css({opacity: 1});
+							<%}%>
+							<% if(character.torso){%>
+								$(".corpo-1").attr("src","<%=items[character.torso].thumbnail%>");
+								$(".corpo-1").css({opacity: 1});
+							<%}%>
+							<% if(character.shoes){%>
+								$(".pe-1").attr("src","<%=items[character.shoes].thumbnail%>");
+								$(".pe-1").css({opacity: 1});
+							<%}%>
+							<% if(character.pants){%>
+								$(".pernas-1").attr("src","<%=items[character.pants].thumbnail%>");
+								$(".pernas-1").css({opacity: 1});
+							<%}%>
+							
+							}, 100);
+							</script>
+						</div>
+						
+					</div>
+
+					<div class="col-md my-auto">
+						<div style="margin: 20px">
+							<div class="row">
+								<div class="col-md-auto " style="padding:0">
+									<img src= "/assets/icons/coin_03d.png"></img>
+								</div>
+								<div class="col-md-auto align-self-center d-table" style="padding: 0">
+									<h3 style="margin: auto;"><%= character.coins%></h3>
+								</div>
+								
+							</div>
+							
+							<div class="row">
+								<div class="col-md-auto " style="padding:0">
+									<img src= "/assets/icons/crystal_01j.png"></img>
+								</div>
+								<div class="col-md-auto align-self-center d-table" style="padding: 0">
+									<h3 style="margin: auto;"><%= character.morcs%></h3>
+								</div>
+								
+							</div>
+						</div>
+					
+						<div class="row attribute">
+							Ataque: <%= character.getAttribute("attack")%>
+						</div>
+						<div class="row attribute">
+							Defesa: <%= character.getAttribute("defense")%>
+						</div>
+						<div class="row attribute">
+							Crítico: <%= character.getAttribute("critic")%> (<%=(character.getCriticPercentage() * 100).toFixed(1)%>%)
+						</div>
+						<div class="row attribute">
+							Velocidade: <%= character.getAttribute("velocity")%>
+						</div>
+						<div class="row attribute">
+							Versatilidade: <%= character.getAttribute("versatility")%>
+						</div>
+						<div class="row attribute">
+							Vitalidade: <%= character.getAttribute("max_health")%>
+						</div>
+					</div>
 				</div>
-				<div class="row attribute">
-					Defesa: <%= character.defense%>
-				</div>
-				<div class="row attribute">
-					Crítico: <%= Math.floor(character.critic*100)%>%
-				</div>
-				<div class="row attribute">
-					Velocidade: <%= character.velocity%>
-				</div>
-				<div class="row attribute">
-					Versatilidade: <%= character.versatility%>
-				</div>
-				<div class="row attribute">
-					Vitalidade: <%= character.max_health%>
+				<div class="row justify-content-md-center" style="margin: 20px"> <!-- Linha das armas e trinkets -->
+					<div class="col-md">
+						Arma
+						<div class="slot-square">
+						<%if(character.weapon) {%>
+							<img src="<%= items[character.weapon].thumbnail%>" class="img-fluid pix" style="width:100%; height:100%;"
+							onmouseenter="mouseEnter()" onmouseleave="mouseExit()" 
+							onmousemove='mouseMove(event, <%=JSON.stringify(items[character.weapon])%>, "<%=character.weapon%>")'></img>
+						<%}%>
+						</div>
+					</div>
+					<div class="col-md">
+						Berloque
+						<div class="slot-square">
+					
+						</div>
+					</div>
+					<div class="col-md">
+						Berloque
+						<div class="slot-square">
+					
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 		
 		<div class="row justify-content-center" >
 			<div class="col-md d-flex justify-content-center exp-counter">
-				Vida: <%= character.health + "/" + character.max_health %>
+				Vida: <%= character.health + "/" + character.getAttribute("max_health") %>
 			</div>
 			
 		</div>
@@ -51,12 +182,12 @@
 			<div class="col-sm justify-content-center">
 				<div class="progress" style="height:40px">
 					<div 
-						class="progress-bar exp-counter" 
+						class="progress-bar exp-counter bg-success" 
 						role="progressbar" 
 						aria-valuenow="<%= character.health%>" 
 						aria-valuemin="0" 
 						aria-valuemax="<%= character.max_health%>"
-						style="width: <%= Math.floor((character.health/character.max_health)*100)%>%">
+						style="width: <%= Math.floor((character.health/character.getAttribute("max_health"))*100)%>%">
 					</div>
 				</div>
 			</div>
@@ -71,7 +202,7 @@
 		
 		<div class="progress" style="height:40px">
 			<div 
-				class="progress-bar exp-counter" 
+				class="progress-bar exp-counter " 
 				role="progressbar" 
 				aria-valuenow="<%= character.experience%>" 
 				aria-valuemin="0" 
@@ -95,16 +226,22 @@
 			<div id="t-description" class="row tooltip-row">
 				[description]
 			</div>
+			<div id="t-stats" class="row tooltip-row" style="display: none;">
+				<div class="col">
+					[stats]
+				</div>
+			</div>
 			<div id="t-item-type" class="row tooltip-row">
 				[item-type]
 			</div>
-			<div id="t-command" class="row tooltip-row">
+			<div id="t-command" class="row tooltip-row" style="display: none;">
 				[command]
 			</div>
+			
 		</div>
 		
-		<script>		
-		
+		<script>	
+
 			function mouseEnter(){
 				$("#tooltip").show();
 			}
@@ -115,30 +252,81 @@
 		
 			function mouseMove(event, obj, item){
 				
+				var scrollPos = $(window).scrollTop();
+				
 				$("#tooltip").css({ 
 					position: "absolute",
 					marginLeft: 0, marginTop: 0,
-					left: event.pageX + 30,
-					top: event.pageY - 200
+					left: event.clientX + 30,
+					top: event.clientY + scrollPos - $("#tooltip").height()
 				}).appendTo('body');
 				
+				let character = <%- JSON.stringify(character)%>;
+				let items = <%- JSON.stringify(items)%>;
+				
 				let type = "";
+				let command = "";
+				
+				$("#t-command").hide();
+				$("#t-stats").hide();
+				
 				switch(obj.type){
 					case "consumable":
 						type = "Consumível";
+						command = ">item " + item;
+						$("#t-command").show();
+						$("#t-command").html(command);
 					break;
+					case "equipment":
+						type = "Equipamento";
+						command = ">equipar " + item;
+						$("#t-command").show();
+						$("#t-command").html(command);
+						$("#t-stats").show();
+						
+						//Calcula a diferença entre o item q eu to passando o mouse em cima, e o item equipado (se tiver algum)
+						let atck_dt = obj.attack - (character[obj.slot] ? items[character[obj.slot]].attack : 0);
+						let def_dt = obj.defense - (character[obj.slot] ? items[character[obj.slot]].defense : 0);
+						let cr_dt = obj.critic - (character[obj.slot] ? items[character[obj.slot]].critic : 0);
+						let vel_dt = obj.velocity - (character[obj.slot] ? items[character[obj.slot]].velocity : 0);
+						let ver_dt = obj.versatility - (character[obj.slot] ? items[character[obj.slot]].versatility : 0);
+						let mh_dt = obj.max_health - (character[obj.slot] ? items[character[obj.slot]].max_health : 0);
+						
+	let st = "";
+	
+	if(atck_dt != 0 || obj.attack > 0){
+		st += "<div class='row'>Ataque: " + obj.attack + " <span class='stat-"+(atck_dt > 0 ? "green" : (atck_dt < 0 ? "red" : "default"))+"'> ("+(atck_dt > 0 ? "+": "") + atck_dt +")</span></div>";
+	}
+	
+	if(def_dt != 0 || obj.defense > 0){
+		st += "<div class='row'>Defesa: " + obj.defense + " <span class='stat-"+(def_dt > 0 ? "green" : (def_dt < 0 ? "red" : "default"))+"'> ("+(def_dt > 0 ? "+": "") + def_dt +")</span></div>"
+	}
+	
+	if(cr_dt != 0 || obj.critic > 0){
+		st += "<div class='row'>Crítico: " + obj.critic + " <span class='stat-"+(cr_dt > 0 ? "green" : (cr_dt < 0 ? "red" : "default"))+"'> ("+(cr_dt > 0 ? "+": "") + cr_dt +")</span></div>"
+	}
+	
+	if(vel_dt != 0 || obj.velocity > 0){
+		st += "<div class='row'>Velocidade: " + obj.velocity + " <span class='stat-"+(vel_dt > 0 ? "green" : (vel_dt < 0 ? "red" : "default"))+"'> ("+(vel_dt > 0 ? "+": "") + vel_dt +")</span></div>"
+	}
+	
+	if(ver_dt != 0 || obj.versatility > 0){
+		st += "<div class='row'>Versatilidade: " + obj.versatility + " <span class='stat-"+(ver_dt > 0 ? "green" : (ver_dt < 0 ? "red" : "default"))+"'> ("+(ver_dt > 0 ? "+": "") + ver_dt +")</span></div>"
+	}
+	
+	if(mh_dt != 0 || obj.max_health > 0){
+		st += "<div class='row'>Vitalidade: " + obj.max_health + " <span class='stat-"+(mh_dt > 0 ? "green" : (mh_dt < 0 ? "red" : "default"))+"'> ("+(mh_dt > 0 ? "+": "") + mh_dt +")</span></div>"
+	}
+						
+					$("#t-stats .col").html(st);
+					break;
+
+						
 				}
 				
 				$("#t-title").html(obj.display_name);
 				$("#t-description").html(obj.description);
 				$("#t-item-type").html(type);
-				$("#t-command").html(">item " + item);
-			}
-			
-			function turnOn(selector){
-				$(selector).css({
-					display: "none"
-				});
 			}
 			
 		</script>
@@ -153,7 +341,7 @@
 				let item = items[k];
 				let stack = character.inventory[k].stack;
 				%>
-				<img src="<%= item.thumbnail %>" class="col-md-1 square img-fluid" style="border: 1px solid white;" onmousemove='mouseMove(event, <%=JSON.stringify(item)%>, "<%=k%>")' onmouseenter="mouseEnter()" onmouseleave="mouseExit()">
+				<img src="<%= item.thumbnail %>" class="col-md-1 square img-fluid pix" style="border: 1px solid white;" onmousemove='mouseMove(event, <%=JSON.stringify(item)%>, "<%=k%>")' onmouseenter="mouseEnter()" onmouseleave="mouseExit()">
 					<span class = "exp-counter" style="position: relative; left: -20px; pointer-events: none;">
 						<%= stack%>
 					</span>

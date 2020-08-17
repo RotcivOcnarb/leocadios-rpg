@@ -1,4 +1,5 @@
 let database = require("./database");
+let items = require("./items");
 
 module.exports = class Character {
 	
@@ -6,62 +7,86 @@ module.exports = class Character {
 		this.twitch_id = twitch_id;
 		this.attack = 50;
 		this.defense = 10;
-		this.critic = 0.05; //de 0-1
-		this.versatility = 5; //de 0-1
+		this.critic = 10;
+		this.versatility = 5;
 		this.velocity = 10;
 		this.max_health = 100;
 		this.health = 100;
 		this.level = 1;
 		this.experience = 0;
-		this.max_experience = 100;
+		this.max_experience = 80;
+		this.sub = false;
+		this.mod = false;
 		
 		this.world = "vale_da_lua";
 		this.coins = 0;
+		this.morcs = 0;
 		
-		this.head_slot = {};
-		this.torso_slot = {};
-		this.weapon_slot = {};
-		this.pants_slot = {};
-		this.shoes_slot = {};
-		this.gloves_slot = {};
-		this.trinket_slot = {};
+		this.head;
+		this.torso;
+		this.pants;
+		this.shoes;
+		
+		this.weapon;
+		
+		this.trinket = [];
 		
 		this.inventory = {};
 	}
 	
-	levelUp(display_name){
+	getAttribute(attr){
+		let att = this[attr];
+		
+		let slots = ["head", "torso", "weapon", "pants", "shoes", "gloves"];
+		
+		for(var i in slots){
+			slots[i];
+			
+			if(this[slots[i]]){
+				att += items[this[slots[i]]][attr];
+			}
+		}
+		return att;
+	}
+	
+	getCriticPercentage(){
+		return (1 / (-(this.getAttribute("critic")/700 + 2)) + 0.5) * 2;
+	}
+	
+	levelUp(){
 		this.experience -= this.max_experience;
+		
+		if(this.experience < 0) this.experience = 0; //pra caso algum mod upar sem ter a exp
+		
 		this.level ++;
 		this.max_experience *= 1.2;
 		this.max_experience = Math.floor(this.max_experience);
 		
 		//Aumenta o status do player
 		this.max_health *= 1.1; this.max_health = Math.floor(this.max_health);
-		this.attack *= 1.05; this.attack = Math.floor(this.attack);
+		this.attack *= 1.1; this.attack = Math.floor(this.attack);
 		this.defense *= 1.1; this.defense = Math.floor(this.defense);
 		this.velocity *= 1.1; this.velocity = Math.floor(this.velocity);
 		
 		this.health = this.max_health;
 	}
 	
-	description(display_name){
-		return [ 
-			"=== " + display_name + " === " + " | " + 
-			"ATK: " + this.attack + " | " + 
-			"DEF: " + this.defense + " | " + 
-			"CRITICO: " + (this.critic * 100) + "%" + " | " + 
-			"VERSATILIDADE: " + this.versatility + " | " + 
-			"VELOCIDADE: " + this.velocity + " | " + 
-			"VITALIDADE: " + this.max_health + " | " + 
-			"VIDA: " + this.health + "/" + this.max_health + " | " + 
-			"NÍVEL: " + this.level + " | " + 
-			"EXP: " + this.experience + "/" + this.max_experience + " | " + 
-			"DINHEIRO: " + this.coins
-		 ];
+	giveItem(item, amount){
+		if(this.inventory[item]){
+			this.inventory[item].stack += amount;
+		}
+		else{
+			this.inventory[item] = { "stack": amount };
+		}
 	}
 	
-	equip_description(obj){
-		//Descrição do equipamento
+	removeItem(item, amount){
+		if(this.inventory[item]){
+			this.inventory[item].stack -= amount;
+			if(this.inventory[item].stack <= 0) delete this.inventory[item];
+			return true;
+		}
+		return false;
 	}
 	
 }

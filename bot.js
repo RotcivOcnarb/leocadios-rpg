@@ -26,6 +26,11 @@ const opts = {
 
 // Create a client with our options
 const client = new tmi.client(opts);
+client.say_2 = client.say;
+client.say = function(channel, message){
+	console.log("-> " + message + "\n--");
+	client.say_2(channel, message);
+}
 
 function init(){
 
@@ -33,6 +38,19 @@ function init(){
 	client.on('message', onMessageHandler);
 	client.on('connected', onConnectedHandler);
 	client.on("raw_message", onRawMessage);
+	client.on("whisper", (from, userstate, message, self) => {
+		// Don't listen to my own messages..
+		if (self) return;
+		
+		
+		
+		console.log("Recebi um whisper de " + from );
+		
+		client.whisper("RotcivOcnarb", "Sua mensagem foi: ");
+		client.whisper("RotcivOcnarb", message);
+
+		// Do your stuff.
+	});
 
 	database.loadDatabase();
 
@@ -64,8 +82,8 @@ function init(){
 			
 			if(!combat.isPlayerInCombat(ch)){
 				if(lastActivity[ch.twitch_id] && (Date.now() - lastActivity[ch.twitch_id]) < 1000 * 60 * 5){
-					ch.health += (0.1 * ch.max_health);
-					ch.health = Math.min(Math.floor(ch.health), ch.max_health);
+					ch.health += (0.1 * ch.getAttribute("max_health"));
+					ch.health = Math.min(Math.floor(ch.health), ch.getAttribute("max_health"));
 				}
 			}
 		}
@@ -76,11 +94,33 @@ function init(){
 
 // Called every time a message comes in
 async function onMessageHandler (channel, context, msg, self) {
+	if(self && msg == ">botid") console.log(JSON.stringify(context, null, 2));
 	if (self) { return; } // Ignore messages from the bot
   
 	lastActivity[context["user-id"]] = Date.now();
 	
+	if(msg == ">botid"){
+		client.say(channel, ">botid");
+	}
+	
+	if(msg == ">context"){
+		console.log(JSON.stringify(context, null, 2));
+	}
+	
 	if(context.mod || context.badges.broadcaster == "1"){
+		let allCharacters = database.getAllCharacters();
+		
+		if(msg.startsWith(">deletar")){
+			let tok = msg.split(" ");
+						
+			if(tok.length >= 2){
+				
+				client.say(channel, "o personagem de " + allCharacters[tok[1]].display_name + " foi DELETADO!");
+				delete allCharacters[tok[1]];
+				database.saveDatabase();
+			}
+		}
+		
 		if(msg.startsWith(">dar")){
 			let tok = msg.split(" ");
 						
@@ -94,19 +134,32 @@ async function onMessageHandler (channel, context, msg, self) {
 					stack = Number(tok[3]);
 				}
 				
-				let allCharacters = database.getAllCharacters();
+				
 				
 				if(allCharacters[user_id] && items[item_id]){
-					if(allCharacters[user_id].inventory[item_id]){
-						allCharacters[user_id].inventory[item_id].stack += stack;
-					}
-					else{
-						allCharacters[user_id].inventory[item_id] = {
-							stack: stack
-						};
-					}
+					allCharacters[user_id].giveItem(item_id, stack);
 				}
 				client.say(channel, "Sucesso! Um moderador deu à " + user_id + " " + stack + " items [" + items[item_id].display_name + "]");
+			}
+		}
+		
+		if(msg.startsWith(">editar")){
+			let tok = msg.split(" ");
+			
+			if(tok.length == 4){
+				
+				let item_id = tok[1];
+				let attribute = tok[2];
+				
+			}
+		}
+		
+		if(msg.startsWith(">upar")){
+			let tok = msg.split(" ");
+			
+			if(tok.length == 2){
+				allCharacters[tok[1]].levelUp(display_names[tok[1]]);
+				client.say(channel, display_names[tok[1]] + " acaba de UPAR DE NÍVEL, e agora está no nível " + allCharacters[tok[1]].level + "!");
 			}
 		}
 	}
@@ -116,7 +169,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	let display_name = context['display-name'];
   	  
 	if(msg == ">criar personagem"){
-		if(database.createNewCharacter(context["user-id"])){
+		if(database.createNewCharacter(context["user-id"], context.subscriber, (context.mod || context.badges.broadcaster == "1"))){
 			client.say(channel, `Personagem de ${display_name} criado com sucesso! Bem-vindo ao RPG do Gui Leocádio!`);
 		}
 		else{
@@ -133,7 +186,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	if(msg == ">personagem"){
 
 		if(character){
-			client.say(channel, "Para ver os status do personagem de "+display_name+", acesse esse link: https://localhost:8000?id=" + context["user-id"]);
+			client.say(channel, "Para ver os status do personagem de "+display_name+", acesse esse link: https://leocadios-rpg.herokuapp.com?id=" + context["user-id"]);
 		}
 		else{
 			client.say(channel, "Não conseguimos encontrar o seu personagem, para criar um novo personagem use o comando >criar personagem");
@@ -161,7 +214,7 @@ async function onMessageHandler (channel, context, msg, self) {
 		if(context["custom-reward-id"]){
 			if(context["custom-reward-id"] == REVIVER_REWARD){
 				client.say(channel, "O personagem de " + display_name + " foi completamente recuperado!");
-				character.health = character.max_health;
+				character.health = character.getAttribute("max_health");
 			}
 		}
 		
@@ -198,6 +251,32 @@ async function onMessageHandler (channel, context, msg, self) {
 			}
 			else{
 				client.say(channel, "Você não pode usar itens durante um combate!");
+			}
+		}
+		
+		if(msg.startsWith(">equipar")){
+			if(!combat.isPlayerInCombat(character)){
+				let tok = msg.split(" ");
+				
+				if(tok.length >= 2){
+					if(character.inventory[tok[1]]){
+						
+						if(items[tok[1]].type == "equipment"){
+							items.equip(character, tok[1]);
+							client.say(channel, "Você equipou o item " + items[tok[1]].display_name);
+						}
+						else{
+							client.say(channel, "O item " + items[tok[1]].display_name + " não é equipável!");
+						}
+						
+					}
+					else{
+						client.say(channel, "Não consegui encontrar o item " + tok[1] + " no inventário de " + display_name);
+					}
+				}
+			}
+			else{
+				client.say(channel, "Você não pode equipar itens durante um combate!");
 			}
 		}
 		

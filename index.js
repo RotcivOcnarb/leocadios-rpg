@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 				"allCharacters": allCharacters,
 				"character": allCharacters[twitch_id],
 				"items": items
+				
 			});
 		}
 		else res.render("not_found");
@@ -28,7 +29,7 @@ app.get("/", (req, res) => {
 	
 });
 
-app.listen(process.env.PORT || 5000, () => {
-	console.log("server started on port " + (process.env.PORT || 5000));
+app.listen(process.env.PORT || 80, () => {
+	console.log("server started on port " + (process.env.PORT || 80));
 });
 

@@ -29,6 +29,7 @@
 
 #tooltip{
 	position: absolute;
+	z-index: 20;
 	
 }
 
@@ -43,6 +44,88 @@
 	border: 1px solid black;
 	border-radius: 5px;
 	
+}
+
+#base-visu{
+	top: 150px;
+	left: 40px;
+}
+
+.base-render{
+	width: 80px;
+	height: 80px;
+	position:relative;
+}
+
+.cabeca{
+	top: -55px;
+	left: 85px;
+	z-index: 8;
+}
+.cabeca-1{
+	
+	top: -155px;
+	left: 85px;
+	z-index: 9;
+}
+
+.corpo{
+	z-index: 6;
+}
+.corpo-1{
+	z-index: 7;
+	top: -87px;
+	left: -2px;
+}
+
+.pernas{
+	z-index: 4;
+	top: 47px;
+	left: -168px;
+	
+}
+.pernas-1{
+	z-index: 5;
+	top: -35px;
+	left: -170px;
+	
+}
+
+.pe{
+	z-index: 2;
+	top: 87px;
+	left: -83px;
+}
+.pe-1{
+	z-index: 3;
+	top: 12px;
+	left: -85px;
+}
+
+
+.pix{
+	image-rendering: pixelated;
+}
+
+.slot-square{
+	width: 80px;
+	height: 80px;
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+.stat-green{
+	font-weight: bold;
+	color: green;
+}
+.stat-red{
+	font-weight: bold;
+	color: red;
+}
+.stat-default{
+	font-weight: bold;
+	color: gray;
+	display: none;
 }
 
 .attribute{

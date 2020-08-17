@@ -30,6 +30,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 80, () => {
-	console.log("server started on port " + (process.env.PORT || 80));
+	console.log("server started on port " + (process.env.PORT || 80) + " | Environment: " + (process.env.NODE_ENV || "development"));
 });
 

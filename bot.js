@@ -137,9 +137,7 @@ async function onMessageHandler (channel, context, msg, self) {
 				if(tok.length == 4){
 					stack = Number(tok[3]);
 				}
-				
-				
-				
+
 				if(allCharacters[user_id] && items[item_id]){
 					allCharacters[user_id].giveItem(item_id, stack);
 				}
@@ -303,7 +301,7 @@ async function onMessageHandler (channel, context, msg, self) {
 				let key = Object.keys(worlds)[i];
 				let w = worlds[key];
 				if(w.display_name){
-					speech += w.display_name + "[" + key + "]: Nivel " + w.level_range[0] + " até " + w.level_range[1] + " == ";
+					speech += w.display_name + " [" + key + "]: Nivel " + w.level_range[0] + " até " + w.level_range[1] + " == ";
 				}
 			}
 			speech += " == Para teleportar para um mundo, use o comando >mundo nome_do_mundo";

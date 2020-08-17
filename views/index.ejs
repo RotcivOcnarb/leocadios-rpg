@@ -53,13 +53,101 @@
 			<div class="col-md-auto">
 				<div class="row">
 				
-					<div class="col-md-auto my-auto" style="position: relative">
-						<img src = "/assets/base.png" class="img-fluid pix" ></img>
-					</div>
 					
+					<canvas id="character-canvas" width="300" height="400" style="border:1px solid white; border-radius: 5px; margin: 20px"></canvas>
+					
+					<script>
+					
+						var c = document.getElementById("character-canvas");
+						var ctx = c.getContext("2d");
+						ctx.imageSmoothingEnabled = false;
+
+						// Create gradient
+						var grd = ctx.createLinearGradient(0, 0, 0, 400);
+						grd.addColorStop(0, "rgb(163, 73, 164)");
+						grd.addColorStop(1, "rgb(200, 191, 231)");
+
+						// Fill with gradient
+						ctx.fillStyle = grd;
+						
+						
+						//BASE
+						
+						var cabeca = new Image();   // Create new img element
+						cabeca.src = '/assets/cabeca_base.png'; // Set source path
+					
+						var corpo = new Image();   // Create new img element
+						corpo.src = '/assets/corpo_base.png'; // Set source path
+						
+						var pe = new Image();   // Create new img element
+						pe.src = '/assets/pe_base.png'; // Set source path
+						
+						var pernas = new Image();   // Create new img element
+						pernas.src = '/assets/pernas_base.png'; // Set source path
+						
+						//EQUIP
+						
+						var capacete = new Image();
+						<% if(character.head){ %>
+							capacete.src = "<%=items[character.head].thumbnail%>"
+						<%}%>
+						
+						var peitoral = new Image();
+						<% if(character.torso){ %>
+							peitoral.src = "<%=items[character.torso].thumbnail%>"
+						<%}%>
+						
+						var coxotes = new Image();
+						<% if(character.pants){ %>
+							coxotes.src = "<%=items[character.pants].thumbnail%>"
+						<%}%>
+						
+						var botas = new Image();
+						<% if(character.shoes){ %>
+							botas.src = "<%=items[character.shoes].thumbnail%>"
+						<%}%>
+						
+						var arma = new Image();
+						<% if(character.weapon){ %>
+							arma.src = "<%=items[character.weapon].thumbnail%>"
+						<%}%>
+						
+						
+						let y = (400 - 220)/2;
+						
+						setInterval(function(){
+							ctx.fillRect(0, 00, 300, 400);
+							
+							ctx.save();
+							
+							ctx.translate(150, 200);
+							ctx.scale(1.5, 1.5);
+							ctx.translate(-150, -200);
+							
+							
+							ctx.drawImage(pe, (300 - 80)/2, 140+y, 80, 80);
+							ctx.drawImage(botas, (300 - 80)/2+2, 140+y, 80, 80);
+							
+							ctx.drawImage(pernas, (300 - 80)/2, 105+y, 80, 80);
+							ctx.drawImage(coxotes, (300 - 80)/2-2, 105+y, 80, 80);
+							
+							ctx.drawImage(corpo, (300 - 80)/2, 52+y, 80, 80);
+							ctx.drawImage(peitoral, (300 - 80)/2-2, 50+y, 80, 80);
+							
+							ctx.drawImage(cabeca, (300 - 80)/2, y, 80, 80);
+							ctx.drawImage(capacete, (300 - 80)/2-2, -10+y, 80, 80);
+							
+							//ctx.scale(-1, 1);
+							ctx.drawImage(arma, (300 - 80)/2+5, 50+y, 80, 80);
+							
+							ctx.restore();
+							//ctx
+							
+						}, 1);
+					</script>
+					
+					<!--
 					<div id="base-visu" style="position: absolute">
-						<!-- Imagem base do personagem -->
-						<!-- <img src="/assets/base.png" class="img-fluid" ></img> -->
 						<img src = "/assets/cabeca_base.png" class="img-fluid pix base-render cabeca"></img>
 						<img src = "/assets/corpo_base.png" class="img-fluid pix base-render corpo"></img>
 						<img src = "/assets/pe_base.png" class="img-fluid pix base-render pe"></img>
@@ -101,6 +189,7 @@
 						</div>
 						
 					</div>
+					-->
 
 					<div class="col-md my-auto">
 						<div style="margin: 20px">

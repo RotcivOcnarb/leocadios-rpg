@@ -302,7 +302,9 @@ async function onMessageHandler (channel, context, msg, self) {
 			for(i in Object.keys(worlds)){
 				let key = Object.keys(worlds)[i];
 				let w = worlds[key];
-				speech += w.display_name + "[" + key + "]: Nivel " + w.level_range[0] + " até " + w.level_range[1] + " == ";
+				if(w.display_name){
+					speech += w.display_name + "[" + key + "]: Nivel " + w.level_range[0] + " até " + w.level_range[1] + " == ";
+				}
 			}
 			speech += " == Para teleportar para um mundo, use o comando >mundo nome_do_mundo";
 			client.say(channel, speech);

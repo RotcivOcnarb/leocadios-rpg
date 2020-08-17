@@ -13,7 +13,7 @@ let lastTutorialMessage = 0;
 
 let REVIVER_REWARD = "39f8f088-4456-4785-96bb-72e9cc5b8f69";
 
-const client;
+let client;
 
 function init(environment){
 	

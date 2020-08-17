@@ -4,7 +4,9 @@ const path = require("path");
 const database = require("./database");
 const items = require("./items");
 
-require("./bot")(); //Inicia o bot da twitch
+let environment = (process.env.NODE_ENV || "development");
+
+require("./bot")(environment); //Inicia o bot da twitch
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -30,6 +32,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || 80, () => {
-	console.log("server started on port " + (process.env.PORT || 80) + " | Environment: " + (process.env.NODE_ENV || "development"));
+	console.log("server started on port " + (process.env.PORT || 80) + " | Environment: " + environment);
 });
 

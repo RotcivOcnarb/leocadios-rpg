@@ -13,26 +13,28 @@ let lastTutorialMessage = 0;
 
 let REVIVER_REWARD = "39f8f088-4456-4785-96bb-72e9cc5b8f69";
 
-// Define configuration options
-const opts = {
-  identity: {
-    username: "RotsBots",
-    password: "oauth:o8ut98dsvn59t5hqynkhlm6o4x8yz6"
-  },
-  channels: [
-    "RotcivOcnarb"
-  ]
-};
 
-// Create a client with our options
-const client = new tmi.client(opts);
-client.say_2 = client.say;
-client.say = function(channel, message){
-	console.log("-> " + message + "\n--");
-	client.say_2(channel, message);
-}
 
-function init(){
+function init(environment){
+	
+	// Define configuration options
+	const opts = {
+	  identity: {
+		username: "RotsBots",
+		password: "oauth:o8ut98dsvn59t5hqynkhlm6o4x8yz6"
+	  },
+	  channels: [
+		(environment == "production" ? "RotsBots" : "RotcivOcnarb")
+	  ]
+	};
+
+	// Create a client with our options
+	const client = new tmi.client(opts);
+	client.say_2 = client.say;
+	client.say = function(channel, message){
+		console.log("-> " + message + "\n--");
+		client.say_2(channel, message);
+	}
 
 	// Register our event handlers (defined below)
 	client.on('message', onMessageHandler);
@@ -107,7 +109,7 @@ async function onMessageHandler (channel, context, msg, self) {
 		console.log(JSON.stringify(context, null, 2));
 	}
 	
-	if(context.mod || context.badges.broadcaster == "1"){
+	if(context.mod || (context.badges && context.badges.broadcaster == "1")){
 		let allCharacters = database.getAllCharacters();
 		
 		if(msg.startsWith(">deletar")){

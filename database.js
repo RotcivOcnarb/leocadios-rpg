@@ -1,16 +1,22 @@
 let allCharacters = {};
 const fs = require("fs");
 const Character = require("./character");
+const storage = require("./drive_api");
 
 let exp = {
 	
 	"getAllCharacters": () => allCharacters,
 	
-	"loadDatabase": function(){
-		fs.readFile("database.json", "utf8", (err, data) => {
-			if (err) return console.log(err);
-			allCharacters = JSON.parse(data);
-			
+	"loadDatabase": (env) => storage.loadDatabase("database_"+env, function(data){
+			allCharacters = data;
+			if(data.error){
+				console.log("ERROR loading database ["+"database_"+env+".json]:");
+				console.log(JSON.stringify(data, null, 2));
+				allCharacters = {};
+				storage.saveDatabase("database_"+env, allCharacters);
+				
+				return;
+			}
 			for(prop in Object.keys(allCharacters)){
 				let k = Object.keys(allCharacters)[prop];
 				
@@ -18,14 +24,9 @@ let exp = {
 				Object.assign(instance, allCharacters[k]);
 				allCharacters[k] = instance;
 			}
-		});
-	},
+		}),
 
-	"saveDatabase": function(){
-		fs.writeFile("database.json", JSON.stringify(allCharacters), "utf8", (err) => {
-			if (err) return console.log(err);
-		});
-	},
+	"saveDatabase": (env) => storage.saveDatabase("database_"+env, allCharacters),
 
 	"createNewCharacter": function (twitch_id, sub, mod){
 		

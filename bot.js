@@ -54,12 +54,13 @@ function init(environment){
 		// Do your stuff.
 	});
 
-	database.loadDatabase();
+	client.environment = environment;
+	database.loadDatabase(environment);
 
 	// Connect to Twitch:
 	client.connect();
 
-	setInterval(database.saveDatabase, 1000 * 30);
+	setInterval(() => database.saveDatabase(environment), 1000 * 30);
 	setInterval(() => {
 		twitch.getLiveViewCount((count) => {
 			view_count = count;
@@ -121,7 +122,6 @@ async function onMessageHandler (channel, context, msg, self) {
 				
 				client.say(channel, "o personagem de " + allCharacters[tok[1]].display_name + " foi DELETADO!");
 				delete allCharacters[tok[1]];
-				database.saveDatabase();
 			}
 		}
 		
@@ -173,6 +173,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	if(msg == ">criar personagem"){
 		if(database.createNewCharacter(context["user-id"], context.subscriber, moderator)){
 			client.say(channel, `Personagem de ${display_name} criado com sucesso! Bem-vindo ao RPG do Gui Leocádio!`);
+			database.saveDatabase(client.environment);
 		}
 		else{
 			client.say(channel, `Desculpe, não conseguimos criar um novo personagem para você. Será que já não existe um personagem criado na sua conta? Use o comando >character para ver o seu personagem!`);

@@ -3,6 +3,8 @@ const fs = require("fs");
 const Character = require("./character");
 const storage = require("./drive_api");
 
+//teste git
+
 let exp = {
 	
 	"getAllCharacters": () => allCharacters,

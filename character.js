@@ -1,10 +1,15 @@
 let database = require("./database");
 let items = require("./items");
+let analytics = require("./analytics");
+var crypto = require('crypto');
+
+let environment = (process.env.NODE_ENV || "development");
 
 module.exports = class Character {
 	
 	constructor(twitch_id){
-		this.twitch_id = twitch_id;
+		this.twitch_id = twitch_id;		
+		
 		this.attack = 50;
 		this.defense = 10;
 		this.critic = 10;
@@ -69,6 +74,24 @@ module.exports = class Character {
 		this.velocity *= 1.1; this.velocity = Math.floor(this.velocity);
 		
 		this.health = this.max_health;
+		
+		var shasum = crypto.createHash('sha1');
+		shasum.update(this.twitch_id);
+		
+		analytics.event({
+			ec: "character",
+			ea: "level_up",
+			uid: shasum.digest('hex'),
+			cd1: environment,
+			md1: this.getAttribute("attack"),
+			md2: this.getAttribute("defense"),
+			md3: this.getAttribute("critic"),
+			md4: this.getAttribute("versatility"),
+			md5: this.getAttribute("velocity"),
+			md6: this.getAttribute("max_health"),
+			cd2: this.level
+			
+		}).send();
 	}
 	
 	giveItem(item, amount){

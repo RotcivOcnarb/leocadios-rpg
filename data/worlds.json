@@ -1,0 +1,432 @@
+{
+  "vale_da_lua": {
+    "display_name": "Vale da Lua",
+    "level_range": [
+      1,
+      5
+    ],
+    "drop_rate": 0.1,
+    "drop": {
+      "1": [
+        "touquinha_legal",
+        "camisa_verde",
+        "calca_azul",
+        "pano_para_os_pes",
+        "espada_comum",
+        "espada_curta",
+        "espada_fraca"
+      ],
+      "2": [
+        "capacete_de_barro",
+        "colete_esfarrapado",
+        "calcas_esfarrapadas",
+        "botinhas_podres",
+        "espada_firme",
+        "espada_basica",
+        "espada_rustica",
+        "curta_de_ouro"
+      ],
+      "3": [
+        "capacete_de_barro",
+        "colete_esfarrapado",
+        "calcas_esfarrapadas",
+        "botinhas_podres",
+        "pequena_bronze",
+        "firme_enferrujada",
+        "espada_pequena",
+        "firme_de_bronze"
+      ],
+      "4": [
+        "pisantes_de_couro",
+        "calca_marrom",
+        "colete_de_couro",
+        "capuz_de_couro",
+        "pequena_bronze",
+        "firme_enferrujada",
+        "espada_pequena",
+        "firme_de_bronze"
+      ],
+      "5": [
+        "pisantes_de_couro",
+        "calca_marrom",
+        "colete_de_couro",
+        "capuz_de_couro",
+        "espada_curvada",
+        "espada_fina",
+        "espada_guerreiro"
+      ],
+      "boss": [
+        "capacete_enferrujado",
+        "peitoral_enferrujado",
+        "coxotes_enferrujados",
+        "pisantes_macios",
+        "rustica_brilhosa",
+        "espada_pesada",
+        "comum_bronze",
+        "lamina_dourada"
+      ]
+    },
+    "enemies": [
+      "coelho_fofo",
+      "tigrinho_filhote",
+      "ratinho_sujo",
+      "pombo_selvagem",
+      "semente_de_arboreo",
+      "pequeno_timmy",
+      "tigre_adolescente",
+      "coruja_esperta",
+      "pequeno_cervo",
+      "pato_de_papete",
+      "folicardo",
+      "lunilidio",
+      "galo_de_calca",
+      "mutacao_fungica",
+      "gato_selvagem"
+    ],
+    "boss": "guardiao_do_vale"
+  },
+  "recanto_dos_geodos": {
+    "display_name": "Recanto dos Geodos",
+    "level_range": [
+      6,
+      10
+    ],
+    "drop_rate": 0.1,
+    "drop": {
+      "6": [
+        "botas_de_guarda",
+        "calcas_de_guarda",
+        "peitoral_de_guarda",
+        "capacete_de_guarda",
+        "curta_de_latao",
+        "pesada_ouro",
+        "espada_enfraquecida",
+        "curta_de_prata"
+      ],
+      "7": [
+        "botas_de_guarda",
+        "calcas_de_guarda",
+        "peitoral_de_guarda",
+        "capacete_de_guarda",
+        "firme_de_ferro",
+        "comum_pepita",
+        "espada_lanca"
+      ],
+      "8": [
+        "botas_de_guarda",
+        "calcas_de_guarda",
+        "peitoral_de_guarda",
+        "capacete_de_guarda",
+        "espada_chamas",
+        "firme_brilhante",
+        "espada_de_ferro_encantada",
+        "cimitarra_do_fogo_eterno"
+      ],
+      "9": [
+        "capacete_da_noite",
+        "peitoral_da_noite",
+        "calcas_da_noite",
+        "botas_da_noite",
+        "espada_chamas",
+        "firme_brilhante",
+        "espada_de_ferro_encantada",
+        "cimitarra_do_fogo_eterno"
+      ],
+      "10": [
+        "capacete_da_noite",
+        "peitoral_da_noite",
+        "calcas_da_noite",
+        "botas_da_noite",
+        "espada_ametista",
+        "espada_de_quartzo_rosa",
+        "punhal_de_netuno",
+        "lamina_preciosa"
+      ],
+      "boss": [
+        "capacete_da_furia_ardente",
+        "peitoral_da_furia_ardente",
+        "coxotes_da_furia_ardente",
+        "botas_da_furia_ardente",
+        "punhal_de_gelo",
+        "espada_sapo",
+        "verde_esmeralda",
+        "lamina_de_lamina"
+      ]
+    },
+    "enemies": [
+      "rubidio",
+      "aspecto_elemental_pequeno",
+      "pedrinha",
+      "rochedinho",
+      "mineridio_de_estanho",
+      "terroso_fraco",
+      "mineridio_de_cobre",
+      "esmerardo",
+      "lasca_pirica",
+      "elemental_do_vento_fraco",
+      "aspecto_elemental_medio",
+      "lasca_terrena",
+      "elemental_da_rocha_fraca",
+      "terroso_jovem",
+      "mineridio_de_ferro"
+    ],
+    "boss": "elemental_da_terra"
+  },
+  "santuario_espectral": {
+    "display_name": "Santuário Espectral",
+    "level_range": [
+      11,
+      15
+    ],
+    "drop_rate": 0.1,
+    "drop": {
+      "11": [
+        "capacete_da_forca",
+        "peitoral_da_forca",
+        "calcas_da_forca",
+        "pisantes_da_forca",
+        "espada_longa_da_sobriedade",
+        "rainha_de_gelo",
+        "salmao"
+      ],
+      "12": [
+        "capacete_da_forca",
+        "peitoral_da_forca",
+        "calcas_da_forca",
+        "pisantes_da_forca",
+        "espada_de_ferro_de_qualidade",
+        "lamina_do_fogo_gelido",
+        "vanish",
+        "montante_grosso"
+      ],
+      "13": [
+        "capacete_da_forca",
+        "peitoral_da_forca",
+        "calcas_da_forca",
+        "pisantes_da_forca",
+        "zeus_iii",
+        "espada_da_besta",
+        "montante_grosso_encantado",
+        "lamina_escura"
+      ],
+      "14": [
+        "capacete_elemental",
+        "peitoral_elemental",
+        "coxotes_elementais",
+        "pisantes_elementais",
+        "zeus_iii",
+        "espada_da_besta",
+        "montante_grosso_encantado",
+        "lamina_escura"
+      ],
+      "15": [
+        "capacete_elemental",
+        "peitoral_elemental",
+        "coxotes_elementais",
+        "pisantes_elementais",
+        "lamina_da_alma_corrompida",
+        "lamina_da_luxuria",
+        "amarelo_pastel"
+      ],
+      "boss": [
+        "capacete_da_meditação",
+        "colete_da_meditacao",
+        "calcas_da_meditacao",
+        "botas_da_meditação",
+        "florete_avancado",
+        "florete_de_ouro",
+        "o_linguarudo",
+        "espada_dourada_da_sorte"
+      ]
+    },
+    "enemies": [
+      "fantasminha_camarada",
+      "pequena_energia_saltitante",
+      "aparicao_suspeita",
+      "espectro_falso",
+      "caveira_flutuante",
+      "aura_personificada",
+      "aparicao_real",
+      "fantasma_em_chamas",
+      "imagem_espelhada",
+      "energia_concentrada",
+      "assombracao_maior",
+      "espectro_de_vidro",
+      "aura_energizada_grande",
+      "aparicao_maquiavelica",
+      "imagem_assustadora"
+    ],
+    "boss": "encarnacao_demoniaca"
+  },
+  "montanha_laval": {
+    "display_name": "Montanha Laval",
+    "level_range": [
+      16,
+      20
+    ],
+    "drop_rate": 0.1,
+    "drop": {
+      "16": [
+        "capacete_da_escuridao",
+        "colete_da_escuridao",
+        "calcas_da_escuridao",
+        "botas_da_escuridao",
+        "ferro_gay",
+        "florete_incandescente",
+        "espada_de_esgrima",
+        "montante_ciumento"
+      ],
+      "17": [
+        "capacete_da_escuridao",
+        "colete_da_escuridao",
+        "calcas_da_escuridao",
+        "botas_da_escuridao",
+        "lamina_de_sirus",
+        "lamina_amazonica",
+        "punho_vibrante"
+      ],
+      "18": [
+        "capacete_da_escuridao",
+        "colete_da_escuridao",
+        "calcas_da_escuridao",
+        "botas_da_escuridao",
+        "lamina_ostentativa",
+        "relampago_feroz",
+        "lamina_da_serpente"
+      ],
+      "19": [
+        "capuz_do_cla_de_sangue",
+        "peitoral_do_cla_de_sangue",
+        "coxotes_do_cla_de_sangue",
+        "pisantes_do_cla_de_sangue",
+        "lamina_ostentativa",
+        "relampago_feroz",
+        "lamina_da_serpente"
+      ],
+      "20": [
+        "capuz_do_cla_de_sangue",
+        "peitoral_do_cla_de_sangue",
+        "coxotes_do_cla_de_sangue",
+        "pisantes_do_cla_de_sangue",
+        "punhal_de_gelo_eterno",
+        "punhal_encantado",
+        "florete_lunar",
+        "espada_roxa"
+      ],
+      "boss": [
+        "capacete_feral",
+        "colete_feral",
+        "coxotes_ferais",
+        "botas_ferais",
+        "cimitarra_flamejante",
+        "espada_da_penumbra",
+        "montante_gelido",
+        "lamina_de_ametista"
+      ]
+    },
+    "enemies": [
+      "esfera_de_fogo",
+      "elemental_pirico",
+      "lagarta_de_fogo",
+      "terreno_incandescente",
+      "draconideo_filhote",
+      "arborideo_ressecado",
+      "dragao_de_komodo",
+      "familiar_do_fogo",
+      "rochoso_em_chamas",
+      "duende_piromaniaco",
+      "mago_das_chamas",
+      "aspecto_da_piromancia_viva",
+      "slime_de_lava",
+      "dragao_adolescente",
+      "elemental_pirico_maior"
+    ],
+    "boss": "dragao_de_lava"
+  },
+  "planalto_aquamarine": {
+    "display_name": "Planalto Aquamarine",
+    "level_range": [
+      21,
+      25
+    ],
+    "drop_rate": 0.1,
+    "drop": {
+      "21": [
+        "capacete_de_cristal",
+        "peitoral_de_cristal",
+        "calcas_de_cristal",
+        "pisantes_de_cristal",
+        "espada_solar",
+        "espada_curta_da_furia",
+        "claymore_de_papel"
+      ],
+      "22": [
+        "capacete_de_cristal",
+        "peitoral_de_cristal",
+        "calcas_de_cristal",
+        "pisantes_de_cristal",
+        "a_estalactite",
+        "lamina_de_carmesim",
+        "claymore_de_fogo",
+        "espada_digna"
+      ],
+      "23": [
+        "capacete_de_cristal",
+        "peitoral_de_cristal",
+        "calcas_de_cristal",
+        "pisantes_de_cristal",
+        "claymore_de_esmeralda",
+        "espada_do_metalurgico",
+        "sapo_brilhante",
+        "montante_grosso_ii"
+      ],
+      "24": [
+        "capacete_mundial",
+        "colete_mundial",
+        "calcas_mundiais",
+        "botas_mundiais",
+        "claymore_de_esmeralda",
+        "espada_do_metalurgico",
+        "sapo_brilhante",
+        "montante_grosso_ii"
+      ],
+      "25": [
+        "capacete_mundial",
+        "colete_mundial",
+        "calcas_mundiais",
+        "botas_mundiais",
+        "espada_envenenada",
+        "lamina_reforjada",
+        "espada_da_clarividencia",
+        "claymore_avancado"
+      ],
+      "boss": [
+        "capuz_oculto",
+        "peitoral_oculto",
+        "coxotes_ocultos",
+        "pisantes_ocultos",
+        "punhal_sagrado",
+        "punhal_da_dor",
+        "claymore_do_pozinho_magico"
+      ]
+    },
+    "enemies": [
+      "agua_viva_gigante",
+      "tubarao_pequeno",
+      "peixe_com_pernas",
+      "aquatico_enraivecido",
+      "ser_afogado",
+      "peixe_pipa",
+      "camarao_gigante",
+      "polvo_do_planalto",
+      "mutacao_aquatica",
+      "carangueijo_afiado",
+      "ostra_agressiva",
+      "tubarao_branco",
+      "bolha_de_acido",
+      "elemental_da_agua",
+      "aspecto_da_chuva"
+    ],
+    "boss": "senhor_dos_mares"
+  }
+}

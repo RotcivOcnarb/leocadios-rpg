@@ -1,17 +1,23 @@
 let combats = {}; //Todas as batalhas sendo feitas atualmente
 let combat_logs = {};
-const worlds = require("./worlds");
+const worlds = require("./data/worlds.json");
+const enemies = require("./data/enemies.json");
 const items = require("./items");
 
 function engageCombatWithBoss(character, display_name, client, channel, view_count){
 	let world = worlds[character.world];
-	let enemy = world.boss;
+	let enemy = enemies[world.boss];
 	engageCombat(character, display_name, client, channel, view_count, enemy, true);
 }
 
 function engageCombatRandom(character, display_name, client, channel, view_count){
 	let world = worlds[character.world];
-	let enemy = rng_array(world.enemies);
+	
+	let l = clamp(character.level, world.level_range[0], world.level_range[1]);
+
+	let enemy = enemies[rng_array(world.enemies)];
+	while(enemy.level != l) enemy = enemies[rng_array(world.enemies)];
+	
 	engageCombat(character, display_name, client, channel, view_count, enemy, false);
 
 }
@@ -31,10 +37,7 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 		}
 		
 		let world = worlds[character.world];
-		let enemy_level = clamp(character.level, world.level_range[0], world.level_range[1]);
-		if(boss) enemy_level = world.level_range[1];
-		let x = enemy_level;
-		let wait = (20 + (boss ? 30 : 10)*enemy_level);
+		let wait = (20 + (boss ? 30 : 10)*enemy.level);
 		
 		if(character.mod) wait /= 10;
 		else if(character.sub) wait /= 2;
@@ -42,9 +45,8 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 		let combat = {
 			"character": character,
 			"enemy":  enemy,
-			"enemy_level": enemy_level,
 			"world": character.world,
-			"enemy_health": worlds.max_health(enemy_level, boss),
+			"enemy_health": enemy.max_health,
 			"timestamp": Date.now(),
 			"duration": wait
 		};
@@ -57,16 +59,16 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 
 		let ps = false;
 		
-		if(worlds.velocity(enemy_level, boss) == character.velocity)
+		if(enemy.velocity == character.velocity)
 			ps = Math.random() < 0.5;
-		else if(worlds.velocity(enemy_level, boss), boss > character.velocity)
+		else if(enemy.velocity > character.velocity)
 			ps = false;
-		else if(worlds.velocity(enemy_level, boss) < character.velocity)
+		else if(enemy.velocity < character.velocity)
 			ps = true;
 		
 		
 		
-		let speech = display_name + " acaba de encontrar um " + enemy.toUpperCase() + " de nível " + enemy_level + "! --- A batalha durará " + wait + " segundos";
+		let speech = display_name + " acaba de encontrar um " + enemy.display_name.toUpperCase() + " de nível " + enemy.level + "! --- A batalha durará " + wait + " segundos";
 		
 		client.say(channel, speech);
 				
@@ -87,7 +89,7 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 				let result = attack(character, display_name, client, channel, view_count, combat_log, boss);
 				if(result){
 					if(result.result == "win"){
-						speech += display_name + " matou " + enemy.toUpperCase() +"! Ele ganhou " + result.exp + " pontos de experiência e " + result.cns + " moedas! ("+result.view_bonus+"% BONUS!) -- Gostaria de ver o log de batalha? use o comando >log";
+						speech += display_name + " matou " + enemy.display_name.toUpperCase() +"! Ele ganhou " + result.exp + " pontos de experiência e " + result.cns + " moedas! ("+result.view_bonus+"% BONUS!) -- Gostaria de ver o log de batalha? use o comando >log";
 						break;
 					}
 					else if(result.result == "lost"){
@@ -113,7 +115,6 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 
 function enemyAct(character, display_name, client, channel, combat_log, boss){
 	let combat = combats[character.twitch_id];
-	let enemy_level = combat.enemy_level;
 	let enemy = combat.enemy;
 	
 	// Inimigo inicia o combate
@@ -133,9 +134,9 @@ function enemyAct(character, display_name, client, channel, combat_log, boss){
 	*/
 	
 	let cr = false;
-	let dmg = Math.floor(worlds.attack(enemy_level, boss) + rand_range(-worlds.versatility(enemy_level, boss), worlds.versatility(enemy_level, boss)));
+	let dmg = Math.floor(enemy.attack + rand_range(0, enemy.versatility));
 	dmg = Math.max(0, dmg);
-	if(Math.random() < worlds.critic(enemy_level, boss)){
+	if(Math.random() < enemy.critic){
 		dmg *= 2;
 		cr = true;
 	}
@@ -143,10 +144,10 @@ function enemyAct(character, display_name, client, channel, combat_log, boss){
 	
 	if(rec <= 0){
 		//MISS
-		combat_log.push("O inimigo " + enemy.toUpperCase() + " ataca " + display_name + ", porém ele ERRA o ataque!")
+		combat_log.push("O inimigo " + enemy.display_name.toUpperCase() + " ataca " + display_name + ", porém ele ERRA o ataque!")
 	}
 	else{
-		combat_log.push("O inimigo " + enemy.toUpperCase() + " ataca " + display_name + ", causando " + rec + " de dano!" + (cr ? "[CRÍTICO]" : ""));
+		combat_log.push("O inimigo " + enemy.display_name.toUpperCase() + " ataca " + display_name + ", causando " + rec + " de dano!" + (cr ? "[CRÍTICO]" : ""));
 		
 		character.health -= rec;
 		
@@ -164,8 +165,6 @@ function enemyAct(character, display_name, client, channel, combat_log, boss){
 
 function attack(character, display_name, client, channel, view_count, combat_log, boss){	
 	let combat = combats[character.twitch_id];
-	
-	let enemy_level = combat.enemy_level;
 	let enemy = combat.enemy;	
 	
 	/*
@@ -189,15 +188,15 @@ function attack(character, display_name, client, channel, view_count, combat_log
 		dmg *= 2;
 		cr = true;
 	}
-	let rec = dmg - Math.floor(Math.random() * worlds.defense(enemy_level, boss))
+	let rec = dmg - Math.floor(Math.random() * enemy.defense)
 	
 	if(rec <= 0){
 		//MISS
-		combat_log.push(display_name  + " ataca " + enemy.toUpperCase() + ", porém ele ERRA o ataque!");
+		combat_log.push(display_name  + " ataca " + enemy.display_name.toUpperCase() + ", porém ele ERRA o ataque!");
 		return enemyAct(character, display_name, client, channel, combat_log, boss);
 	}
 	else{
-		combat_log.push(display_name  + " ataca " + enemy.toUpperCase() + ", causando " + rec + " de dano!" + (cr ? " [CRÍTICO]" : ""));
+		combat_log.push(display_name  + " ataca " + enemy.display_name.toUpperCase() + ", causando " + rec + " de dano!" + (cr ? " [CRÍTICO]" : ""));
 		
 		combat.enemy_health -= rec;
 		
@@ -207,8 +206,8 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			delete combats[character.twitch_id];
 			
 			let view_bonus = (view_count * 10);
-			let exp = Math.floor(view_bonus/100 + 1 * worlds.exp(enemy_level, boss));
-			let cns = Math.floor(view_bonus/100 + 1 * worlds.coins(enemy_level, boss));
+			let exp = Math.floor(view_bonus/100 + 1 * enemy.exp);
+			let cns = Math.floor(view_bonus/100 + 1 * enemy.coins);
 			
 			if(character.mod) exp *= 10;
 			if(character.sub) exp *= 2;
@@ -225,7 +224,7 @@ function attack(character, display_name, client, channel, view_count, combat_log
 						
 			let drop = [];
 			if(boss) drop = worlds[combat.world].drop.boss;
-			else drop = worlds[combat.world].drop[enemy_level];
+			else drop = worlds[combat.world].drop[enemy.level];
 			
 			if(drop){
 				for(i in drop){
@@ -238,7 +237,7 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			}
 			
 			if(drops.length > 0)
-				client.say(channel, enemy + " acaba de dropar os itens: " + drops.map((el) => "[" + items[el].display_name + "]").join(", "));
+				client.say(channel, enemy.display_name + " acaba de dropar os itens: " + drops.map((el) => "[" + items[el].display_name + "]").join(", "));
 			
 			return {
 				"result": "win",
@@ -257,10 +256,9 @@ function flee(character, display_name, client, channel){
 	
 	if(isPlayerInCombat(character)){
 		let combat = combats[character.twitch_id];
-		let enemy_level = combat.enemy_level;
 		let enemy = combat.enemy;	
 		
-		client.say(channel, display_name + " fica com medo e corre de " + enemy.toUpperCase() + ". Que medroso");
+		client.say(channel, display_name + " fica com medo e corre de " + enemy.display_name.toUpperCase() + ". Que medroso");
 		
 		delete combats[character.twitch_id];
 

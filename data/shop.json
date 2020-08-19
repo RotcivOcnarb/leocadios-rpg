@@ -1,0 +1,43 @@
+{
+
+	"pedrinho": {
+		"type": "random",
+		"item_count": 5,
+		
+	},
+	"narizinho": {
+		"type": "fixed",
+		"items": [
+			"pocao_pequena",
+			"pocao_media",
+			"pocao_grande",
+			
+			"pocao_ataque_basica",
+			"pocao_ataque_media",
+			"pocao_ataque_forte",
+			
+			"pocao_defesa_basica",
+			"pocao_defesa_media",
+			"pocao_defesa_forte",
+			
+			"pocao_vitalidade_basica",
+			"pocao_vitalidade_media",
+			"pocao_vitalidade_forte"
+		]
+	},
+	
+	"gambler": {
+		"type": "fixed",
+		"items": [
+			"presente_1",
+			"presente_2",
+			"presente_3",
+			"presente_4",
+			"presente_5",
+			"presente_6"
+		
+		]
+	
+	}
+	
+}

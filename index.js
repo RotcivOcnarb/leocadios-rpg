@@ -11,7 +11,7 @@ require("./bot")(environment); //Inicia o bot da twitch
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
+app.get("/personagem", (req, res) => {
 	
 	if(req.query["id"]){
 		let twitch_id = req.query["id"];

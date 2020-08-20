@@ -73,7 +73,7 @@ module.exports = class Character {
 		this.defense *= 1.1; this.defense = Math.floor(this.defense);
 		this.velocity *= 1.1; this.velocity = Math.floor(this.velocity);
 		
-		this.health = this.max_health;
+		this.health = this.getAttribute("max_health");
 		
 		var shasum = crypto.createHash('sha1');
 		shasum.update(this.twitch_id);

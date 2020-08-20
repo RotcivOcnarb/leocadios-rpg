@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const database = require("./database");
 const items = require("./items");
+const https = require("https");
 
 let environment = (process.env.NODE_ENV || "development");
 
@@ -28,6 +29,16 @@ app.get("/personagem", (req, res) => {
 		else res.render("not_found");
 	}
 	else res.render("not_found");	
+	
+});
+
+app.get("/ping", (req, res) => {
+	
+	https.request({
+		hostname: "rpg-ping-pong.herokuapp.com",
+		path: "/pong",
+		method: "GET"
+	}).end();	
 	
 });
 

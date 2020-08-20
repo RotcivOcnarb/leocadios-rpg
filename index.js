@@ -34,11 +34,13 @@ app.get("/personagem", (req, res) => {
 
 app.get("/ping", (req, res) => {
 	
+	console.log("PING received, sending pong...");
+	
 	https.request({
 		hostname: "rpg-ping-pong.herokuapp.com",
 		path: "/pong",
 		method: "GET"
-	}).end();	
+	}, res => console.log("pong sent code: " + res.statusCode)).end();	
 	
 });
 

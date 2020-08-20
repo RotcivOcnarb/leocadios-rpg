@@ -40,8 +40,9 @@ app.get("/ping", (req, res) => {
 		hostname: "rpg-ping-pong.herokuapp.com",
 		path: "/pong",
 		method: "GET"
-	}, res => console.log("pong sent code: " + res.statusCode)).end();	
+	}, r => console.log("pong sent code: " + r.statusCode)).end();	
 	
+	res.send();
 });
 
 app.listen(process.env.PORT || 80, () => {

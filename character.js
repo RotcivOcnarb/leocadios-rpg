@@ -83,13 +83,14 @@ module.exports = class Character {
 			ea: "level_up",
 			uid: shasum.digest('hex'),
 			cd1: environment,
-			md1: this.getAttribute("attack"),
-			md2: this.getAttribute("defense"),
-			md3: this.getAttribute("critic"),
-			md4: this.getAttribute("versatility"),
-			md5: this.getAttribute("velocity"),
-			md6: this.getAttribute("max_health"),
-			cd2: this.level
+			cd2: this.level,
+			cd3: process.app_version,
+			cm1: this.getAttribute("attack"),
+			cm2: this.getAttribute("defense"),
+			cm3: this.getAttribute("critic"),
+			cm4: this.getAttribute("versatility"),
+			cm5: this.getAttribute("velocity"),
+			cm6: this.getAttribute("max_health")
 			
 		}).send();
 	}

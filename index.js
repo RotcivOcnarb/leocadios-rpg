@@ -7,6 +7,8 @@ const https = require("https");
 
 let environment = (process.env.NODE_ENV || "development");
 
+process.app_version = "v0.1";
+
 require("./bot")(environment); //Inicia o bot da twitch
 
 app.set("view engine", "ejs");

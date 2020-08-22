@@ -97,6 +97,12 @@ app.get("/addbot", (req, res) => {
 
 });
 
+app.get("/removebot", (req, res) => {
+	
+	res.render("removebot");
+
+});
+
 app.get("/authorize", (req, res) => {
 	
 	https.request({
@@ -147,6 +153,63 @@ app.get("/authorize", (req, res) => {
 		})
 
 		res.render("addchannel");
+	}).end();
+	
+	
+});
+
+app.get("/removesuccess", (req, res) => {
+	
+	https.request({
+		hostname: "id.twitch.tv",
+		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret=bjbu4xo5ib508mebsth83mx6jij0bw&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
+		method: "POST"
+	}, (r) => {
+		console.log(r.statusCode);		
+		let body = "";
+		
+		r.setEncoding('utf8');
+		r.on('data', function (chunk) {
+			body += chunk;
+		});
+		
+		r.on('end', () => {
+			let o = JSON.parse(body);
+			o.access_token
+			
+			https.request({
+				hostname: "api.twitch.tv",
+				path: "/helix/users",
+				method: "GET",
+				headers: {
+					"Client-Id": "mfko21ti9vhpzbpkgbb7lse4yxl7cu",
+					"Authorization": "Bearer " + o.access_token
+				}
+			}, (r2) => {
+				let b = "";
+				r2.on('data', (c) => {b += c;});
+				r2.on('end', () => {
+					//Faz a requisição pro dropbox e atualiza a lista de nomes
+					dropbox.getFile("streamers.json", (contents) => {
+						
+						let a = JSON.parse(contents);
+						let userinfo = JSON.parse(b)["data"][0];
+						if(a.includes(userinfo["login"])){
+							
+							a = a.filter((v, i, a) => v != userinfo["login"]);
+							dropbox.updateFile("streamers.json", JSON.stringify(a), () => {
+								console.log("Removed user " + userinfo["login"] + " from our list");
+								process.exit(1);	
+							});
+													
+						}
+					});
+					;
+				})
+			}).end();
+		})
+
+		res.render("remchannel");
 	}).end();
 	
 	

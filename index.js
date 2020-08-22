@@ -199,7 +199,7 @@ app.get("/removesuccess", (req, res) => {
 							a = a.filter((v, i, a) => v != userinfo["login"]);
 							dropbox.updateFile("streamers.json", JSON.stringify(a), () => {
 								console.log("Removed user " + userinfo["login"] + " from our list");
-								process.exit(1);	
+								process.exit(0);	
 							});
 													
 						}

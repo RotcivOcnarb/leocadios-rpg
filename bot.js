@@ -6,7 +6,7 @@ const twitch = require("./twitch_api");
 const worlds = require("./data/worlds.json");
 const items = require("./items");
 
-let REVIVER_REWARD = "39f8f088-4456-4785-96bb-72e9cc5b8f69";
+let REVIVER_REWARD = "d5d9d990-8b63-4611-86a8-5f4e83919565";
 
 function init(environment, streamer){
 	

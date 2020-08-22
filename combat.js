@@ -206,8 +206,8 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			delete combats[character.twitch_id];
 			
 			let view_bonus = (view_count * 10);
-			let exp = Math.floor(view_bonus/100 + 1 * enemy.exp);
-			let cns = Math.floor(view_bonus/100 + 1 * enemy.coins);
+			let exp = Math.floor((view_bonus/100 + 1) * enemy.exp);
+			let cns = Math.floor((view_bonus/100 + 1) * enemy.coins);
 			
 			if(character.mod) exp *= 10;
 			if(character.sub) exp *= 2;

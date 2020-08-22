@@ -1,4 +1,3 @@
-let database = require("./database");
 let items = require("./items");
 let analytics = require("./analytics");
 var crypto = require('crypto');
@@ -52,6 +51,12 @@ module.exports = class Character {
 			}
 		}
 		return att;
+	}
+	
+	revalidate(){
+		if(this.health > this.getAttribute("max_health")){
+			this.health = this.getAttribute("max_health");
+		}
 	}
 	
 	getCriticPercentage(){

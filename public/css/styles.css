@@ -138,3 +138,32 @@
 	margin: 0;
 	border: 1px solid black;
 	border-radius: 5px;
+}
+
+.npc{
+	width:150px;
+	height: 150px;
+	object-fit: contain;
+}
+
+.speech{
+	image-rendering: pixelated;
+	color: black;
+	margin:25px;
+	width: 200px;
+	text-align: center;
+	background-color: #fff;
+	border-image: url("/assets/speech.png") 25 fill stretch;
+	border-image-width:50px;
+	border-image-outset: 50px;
+}
+
+.s-100{
+	width: 100px;
+	height: 100px;
+}
+
+.fixed-width { 
+    width:80px;
+    float:right;
+}

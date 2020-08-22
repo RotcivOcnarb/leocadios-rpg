@@ -1,0 +1,71 @@
+/***
+ *  Generic CSS Styles
+ */
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+	background: #bbcfd8;
+	padding-top: 20px;
+	font-family: Arial, sans-serif
+}
+
+/***
+ *  Content Styles
+ */
+#center_content {
+	width: 800px;
+	height: 500px;
+	margin: 0 auto;
+	border: 0;
+	background: url('../img/test.9.png') no-repeat -1000px -1000px;
+	position: relative;
+}
+
+#inner_content {
+	width: 100%;
+	padding: 20px;
+	margin-left: -68px;
+	margin-top: -30px;
+}
+
+#fork_me {
+	position: absolute;
+	right: -14px;
+	top: 0;
+}
+
+#drag_corner {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;	
+}
+
+.contributor {
+	font-family: Arial;
+	height: 30px;
+	width: 300px;
+	position: relative;
+	font-size: 15px;
+	padding: 10px 0 0 10px;
+	background: #ffffff url('../img/test_multipart.9.png') no-repeat -1000px -1000px;
+}
+
+.ui-widget-content .ui-icon {
+	background: none;
+}
+
+.ui-widget-content .ui-resizable-e {
+	right: -17px;
+}
+
+.ui-widget-content .ui-resizable-s {
+	bottom: -16px;
+}
+
+.ui-widget-content .ui-resizable-se {
+	right: -14px;
+	bottom: -13px;
+}

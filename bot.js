@@ -6,16 +6,16 @@ const twitch = require("./twitch_api");
 const worlds = require("./data/worlds.json");
 const items = require("./items");
 
-let display_names = {};
-let view_count = 0;
-let lastActivity = {};
-let lastTutorialMessage = 0;
-
 let REVIVER_REWARD = "39f8f088-4456-4785-96bb-72e9cc5b8f69";
 
-let client;
-
-function init(environment){
+function init(environment, streamer){
+	
+	const options = {
+		"display_names": {},
+		"view_count": 0,
+		"lastActivity": {},
+		"lastTutorialMessage": 0
+	}
 	
 	// Define configuration options
 	const opts = {
@@ -23,13 +23,12 @@ function init(environment){
 		username: "RotsBots",
 		password: "oauth:o8ut98dsvn59t5hqynkhlm6o4x8yz6"
 	  },
-	  channels: [
-		(environment == "production" ? "RotsBots" : "RotcivOcnarb")
-	  ]
+	  channels: [ streamer ]
 	};
 
 	// Create a client with our options
 	client = new tmi.client(opts);
+	options.client = client;
 	client.say_2 = client.say;
 	client.say = function(channel, message){
 		console.log("-> " + message + "\n--");
@@ -37,33 +36,19 @@ function init(environment){
 	}
 
 	// Register our event handlers (defined below)
-	client.on('message', onMessageHandler);
+	client.on('message', (ch, co, m, s) => onMessageHandler(ch, co, m, s, environment, streamer, options));
 	client.on('connected', onConnectedHandler);
-	client.on("raw_message", onRawMessage);
-	client.on("whisper", (from, userstate, message, self) => {
-		// Don't listen to my own messages..
-		if (self) return;
-		
-		
-		
-		console.log("Recebi um whisper de " + from );
-		
-		client.whisper("RotcivOcnarb", "Sua mensagem foi: ");
-		client.whisper("RotcivOcnarb", message);
+	client.on('cheer', (ch, co, m) => onCheerHandler(ch, co, m, environment, streamer));
 
-		// Do your stuff.
-	});
-
-	client.environment = environment;
-	database.loadDatabase(environment);
+	database.loadDatabase(environment, streamer);
 
 	// Connect to Twitch:
 	client.connect();
 
-	setInterval(() => database.saveDatabase(environment), 1000 * 30);
+	setInterval(() => database.saveDatabase(environment, streamer), 1000 * 30);
 	setInterval(() => {
 		twitch.getLiveViewCount((count) => {
-			view_count = count;
+			options.view_count = count;
 		})
 	}, 5000);
 
@@ -77,14 +62,14 @@ function init(environment){
 
 	setInterval( () => {
 		//Aumenta a vida de todo mundo a cada 10 segundos se ele não estiver em combate, e ele estiver na live
-		let allCharacters = database.getAllCharacters();
+		let allCharacters = database.getAllCharacters(environment, streamer);
 		
 		for(var i in Object.keys(allCharacters)){
 			var k = Object.keys(allCharacters)[i];
 			var ch = allCharacters[k];
 			
 			if(!combat.isPlayerInCombat(ch)){
-				if(lastActivity[ch.twitch_id] && (Date.now() - lastActivity[ch.twitch_id]) < 1000 * 60 * 5){
+				if(options.lastActivity[ch.twitch_id] && (Date.now() - options.lastActivity[ch.twitch_id]) < 1000 * 60 * 5){
 					ch.health += (0.1 * ch.getAttribute("max_health"));
 					ch.health = Math.min(Math.floor(ch.health), ch.getAttribute("max_health"));
 				}
@@ -96,13 +81,14 @@ function init(environment){
 }
 
 // Called every time a message comes in
-async function onMessageHandler (channel, context, msg, self) {
+async function onMessageHandler (channel, context, msg, self, environment, streamer, options) {
 	if(self && msg == ">botid") console.log(JSON.stringify(context, null, 2));
 	if (self) { return; } // Ignore messages from the bot
 	
 	let moderator = context.mod || (context.badges && context.badges.broadcaster == "1");
-  
-	lastActivity[context["user-id"]] = Date.now();
+  	options.display_names[context["user-id"]] = context['display-name'];
+
+	options.lastActivity[context["user-id"]] = Date.now();
 	
 	if(msg == ">botid"){
 		client.say(channel, ">botid");
@@ -113,7 +99,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	}
 	
 	if(moderator){
-		let allCharacters = database.getAllCharacters();
+		let allCharacters = database.getAllCharacters(environment, streamer);
 		
 		if(msg.startsWith(">deletar")){
 			let tok = msg.split(" ");
@@ -160,27 +146,26 @@ async function onMessageHandler (channel, context, msg, self) {
 			let tok = msg.split(" ");
 			
 			if(tok.length == 2){
-				allCharacters[tok[1]].levelUp(display_names[tok[1]]);
-				client.say(channel, display_names[tok[1]] + " acaba de UPAR DE NÍVEL, e agora está no nível " + allCharacters[tok[1]].level + "!");
+				allCharacters[tok[1]].levelUp(options.display_names[tok[1]]);
+				client.say(channel, options.display_names[tok[1]] + " acaba de UPAR DE NÍVEL, e agora está no nível " + allCharacters[tok[1]].level + "!");
 			}
 		}
 	}
 
   
-	display_names[context["user-id"]] = context['display-name'];
 	let display_name = context['display-name'];
   	  
 	if(msg == ">criar personagem"){
-		if(database.createNewCharacter(context["user-id"], context.subscriber, moderator)){
+		if(database.createNewCharacter(context["user-id"], context.subscriber, moderator, environment, streamer)){
 			client.say(channel, `Personagem de ${display_name} criado com sucesso! Bem-vindo ao RPG do Gui Leocádio!`);
-			database.saveDatabase(client.environment);
+			database.saveDatabase(environment, streamer);
 		}
 		else{
 			client.say(channel, `Desculpe, não conseguimos criar um novo personagem para você. Será que já não existe um personagem criado na sua conta? Use o comando >character para ver o seu personagem!`);
 		}
 	}
 	  
-	let character = database.retrieveCharacterData(context["user-id"]);
+	let character = database.retrieveCharacterData(context["user-id"], environment, streamer);
 	
 	if(msg == ">id"){
 		client.say(channel, context["user-id"]);
@@ -189,7 +174,7 @@ async function onMessageHandler (channel, context, msg, self) {
 	if(msg == ">personagem"){
 
 		if(character){
-			client.say(channel, "Para ver os status do personagem de "+display_name+", acesse esse link: https://leocadios-rpg.herokuapp.com/personagem/?id=" + context["user-id"]);
+			client.say(channel, `Para ver os status do personagem de ${display_name}, acesse esse link: https://leocadios-rpg.herokuapp.com/personagem/?id=${context["user-id"]}&env=${environment}&streamer=${streamer}`);
 		}
 		else{
 			client.say(channel, "Não conseguimos encontrar o seu personagem, para criar um novo personagem use o comando >criar personagem");
@@ -197,17 +182,16 @@ async function onMessageHandler (channel, context, msg, self) {
 	}
 	
 	if(msg == ">tutorial"){
-		if(Date.now() - lastTutorialMessage > 1000 * 60){
+		if(Date.now() - options.lastTutorialMessage > 1000 * 60){
 			client.say(channel, "Bem-vindo ao RPG das Lives do Leocádio! Para começar é simples, crie um personagem com o comando >criar personagem");
 			client.say(channel, "Depois de criar seu personagem, você pode lutar com os monstros do mundo usando o comando >lutar. Você também pode ver as informações de status e experiencia do seu personagem usando o comando >personagem");
 			client.say(channel, "Você também pode lutar com o chefão do mundo usando o comando >boss, e caso queira novos desafios, use o comando >mundos");
-			client.say(channel, "Para mais informações detalhadas sobre o RPG, acesse o documento de ajuda completo! [URL VAI VIR AQUI]");
-			lastTutorialMessage = Date.now();
+			options.lastTutorialMessage = Date.now();
 		}
 	}
 
 	if(msg == ">bonus"){
-		client.say(channel, "A live está atualmente com aproximadamente " + view_count + " espectadores! Isso dá um bonus de " + (view_count*10) + "% em todo o XP e moedas ganhos durante a live!");
+		client.say(channel, "A live está atualmente com aproximadamente " + options.view_count + " espectadores! Isso dá um bonus de " + (options.view_count*10) + "% em todo o XP e moedas ganhos durante a live!");
 	}
 
 	if(character){
@@ -222,7 +206,7 @@ async function onMessageHandler (channel, context, msg, self) {
 		}
 		
 		if(msg == ">lutar"){
-			combat.engageCombatRandom(character, display_name, client, channel, view_count);
+			combat.engageCombatRandom(character, display_name, client, channel, options.view_count);
 		}
 		
 		if(msg.startsWith(">item")){
@@ -234,11 +218,7 @@ async function onMessageHandler (channel, context, msg, self) {
 					if(character.inventory[tok[1]]){
 						
 						if(items[tok[1]].type == "consumable"){
-							items[tok[1]].consume(character, tok);
-							character.inventory[tok[1]].stack --;
-							if(character.inventory[tok[1]].stack <= 0){
-								delete character.inventory[tok[1]];
-							}
+							items.consume(character, tok[1]);
 							client.say(channel, "Você consome o item " + items[tok[1]].display_name);
 						}
 						else{
@@ -293,7 +273,7 @@ async function onMessageHandler (channel, context, msg, self) {
 		}
 		
 		if(msg == ">boss"){
-			combat.engageCombatWithBoss(character, display_name, client, channel, view_count);
+			combat.engageCombatWithBoss(character, display_name, client, channel, options.view_count);
 		}
 		  
 		if(msg == ">mundos"){
@@ -327,10 +307,18 @@ async function onMessageHandler (channel, context, msg, self) {
 	}  
 }
 
-
-function onRawMessage(messageCloned, message){
+function onCheerHandler(channel, context, message){
 	
+	let character = database.retrieveCharacterData(context["user-id"], environment, streamer);
+	options.lastActivity[context["user-id"]] = Date.now();
+
+	if(character){
+		let display_name = context['display-name'];
+		character.morcs += context.bits;
+		client.say(channel, display_name + " acaba de receber " + bits + " Morcs por ter doado bits pro canal!!! Obrigado!");
+	}
 }
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

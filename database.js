@@ -7,50 +7,48 @@ const storage = require("./drive_api");
 
 let exp = {
 	
-	"getAllCharacters": () => allCharacters,
+	"getAllCharacters": (env, streamer) => allCharacters[`${env}_${streamer}`],
 	
-	"loadDatabase": (env) => storage.loadDatabase("database_"+env, function(data){
-			allCharacters = data;
+	"loadDatabase": (env, streamer) => storage.loadDatabase(`database_${env}_${streamer}`, function(data){
+			allCharacters[`${env}_${streamer}`] = data;
 			if(data.error){
-				console.log("ERROR loading database ["+"database_"+env+".json]:");
+				console.log("ERROR loading database ["+`database_${env}_${streamer}`+".json]:");
 				console.log(JSON.stringify(data, null, 2));
-				allCharacters = {};
-				storage.saveDatabase("database_"+env, allCharacters);
+				allCharacters[`${env}_${streamer}`] = {};
+				storage.saveDatabase(`database_${env}_${streamer}`, allCharacters[`${env}_${streamer}`]);
 				
 				return;
 			}
-			for(prop in Object.keys(allCharacters)){
-				let k = Object.keys(allCharacters)[prop];
+			for(prop in Object.keys(allCharacters[`${env}_${streamer}`])){
+				let k = Object.keys(allCharacters[`${env}_${streamer}`])[prop];
 				
 				let instance = new Character("");
-				Object.assign(instance, allCharacters[k]);
-				allCharacters[k] = instance;
+				Object.assign(instance, allCharacters[`${env}_${streamer}`][k]);
+				allCharacters[`${env}_${streamer}`][k] = instance;
 			}
 		}),
 
-	"saveDatabase": (env) => storage.saveDatabase("database_"+env, allCharacters),
+	"saveDatabase": (env, streamer) => storage.saveDatabase(`database_${env}_${streamer}`, allCharacters[`${env}_${streamer}`]),
 
-	"createNewCharacter": function (twitch_id, sub, mod){
+	"createNewCharacter": function (twitch_id, sub, mod, env, streamer){
 		
-		if(!exp.retrieveCharacterData(twitch_id)){
+		if(!exp.retrieveCharacterData(twitch_id, env, streamer)){
 			//CRIA UM PERSONAGEM NOVO
-			allCharacters[twitch_id] = new Character(twitch_id);
-			allCharacters[twitch_id].sub = sub;
-			allCharacters[twitch_id].mod = mod;
-			exp.saveDatabase();
+			let chr = new Character(twitch_id);
+			chr.sub = sub;
+			chr.mod = mod;
+			allCharacters[`${env}_${streamer}`][twitch_id] = chr;
+			
+			exp.saveDatabase(env, streamer);
 			return true; //Código pra sucesso
 		}
 		else return false; //Código pra fracasso: personagem já existe
 		
 	},
 
-	"retrieveCharacterData": function (twitch_id){
-		return allCharacters[twitch_id];
+	"retrieveCharacterData": function (twitch_id, env, streamer){
+		return allCharacters[`${env}_${streamer}`][twitch_id];
 	},
-
-	"updateCharacterInDatabase": function (character){
-		
-	}
 	
 };
 

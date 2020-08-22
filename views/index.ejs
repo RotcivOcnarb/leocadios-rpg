@@ -145,51 +145,6 @@
 							
 						}, 1);
 					</script>
-					
-					<!--
-					<div id="base-visu" style="position: absolute">
-						<img src = "/assets/cabeca_base.png" class="img-fluid pix base-render cabeca"></img>
-						<img src = "/assets/corpo_base.png" class="img-fluid pix base-render corpo"></img>
-						<img src = "/assets/pe_base.png" class="img-fluid pix base-render pe"></img>
-						<img src = "/assets/pernas_base.png" class="img-fluid pix base-render pernas"></img>
-						
-						<div>
-							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render cabeca-1"
-							style="opacity: 0"></img>
-							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render corpo-1"
-							style="opacity: 0"></img>
-							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render pe-1"
-							style="opacity: 0"></img>
-							<img src="/assets/cabeca_base.png" class="img-fluid pix base-render pernas-1" 
-							style="opacity: 0"></img>
-							
-							<script>
-							
-							setInterval(function(){
-													
-							<% if(character.head){%>
-								$(".cabeca-1").attr("src","<%=items[character.head].thumbnail%>");
-								$(".cabeca-1").css({opacity: 1});
-							<%}%>
-							<% if(character.torso){%>
-								$(".corpo-1").attr("src","<%=items[character.torso].thumbnail%>");
-								$(".corpo-1").css({opacity: 1});
-							<%}%>
-							<% if(character.shoes){%>
-								$(".pe-1").attr("src","<%=items[character.shoes].thumbnail%>");
-								$(".pe-1").css({opacity: 1});
-							<%}%>
-							<% if(character.pants){%>
-								$(".pernas-1").attr("src","<%=items[character.pants].thumbnail%>");
-								$(".pernas-1").css({opacity: 1});
-							<%}%>
-							
-							}, 100);
-							</script>
-						</div>
-						
-					</div>
-					-->
 
 					<div class="col-md my-auto">
 						<div style="margin: 20px">

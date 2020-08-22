@@ -63,28 +63,20 @@ function generateItem(name, slot, level, thumbnail, desc){
 	}
 }
 
-const weapons = require("./data/armors.json");
+const shop = require("./data/shop.json");
+const armors = require("./data/armors.json");
+const weapons = require("./data/weapons.json");
 
-for(var a in Object.keys(weapons)){
-	var weapon = weapons[Object.keys(weapons)[a]];
-	weapon = generateItem(weapon.display_name, weapon.slot, weapon.level, weapon.thumbnail, weapon.description);
+for(var v in Object.keys(armors)){
+	var k = Object.keys(armors)[v];
 	
-	let atts = [
-		"attack",
-		"defense",
-		"critic",
-		"versatility",
-		"velocity",
-		"max_health",
-	];
-	
-	for(var v in atts){
-		if(weapon[atts[v]] != 0){
-			weapon[atts[v]] *= 1 + (Math.random() * 0.1 - .05)
-			weapon[atts[v]] = Math.round(Math.max(1, weapon[atts[v]]));
-		}
-	}
-	weapons[Object.keys(weapons)[a]] = weapon;
+	shop["Ferreiro Tyson"].items.push(k);
 }
 
-fs.writeFile("data/armors.json", JSON.stringify(weapons, null, 2), (err) => console.log(err));
+for(var v in Object.keys(weapons)){
+	var k = Object.keys(weapons)[v];
+	
+	shop["Ferreiro Tyson"].items.push(k);
+}
+
+fs.writeFile("./data/shop.json", JSON.stringify(shop, null, 2), (err) => console.log(err));

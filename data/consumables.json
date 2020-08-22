@@ -1,0 +1,117 @@
+{
+	"pocao_pequena": {
+		"display_name": "Poção Pequena",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_01a.png",
+		"description": "Uma pequena poção vermelha que recupera 100 pontos de vida",
+		"consume": "heal 100"
+	},
+	"pocao_media": {
+		"display_name": "Poção Média",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_02a.png",
+		"description": "Uma poção vermelha que recupera 200 pontos de vida",
+		"consume": "heal 200"
+	},
+	"pocao_grande": {
+		"display_name": "Poção Grande",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_03a.png",
+		"description": "Uma grande poção vermelha que recupera 500 pontos de vida",
+		"consume": "heal 500"
+	},
+	"elixir_ataque_pequeno": {
+		"display_name": "Elixir de Ataque Pequeno",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_01f.png",
+		"description": "Um pequeno frasco com líquido laranja. Dizem que quem toma ganha um pequeno boost de ataque (+20 ATK por 10min)",
+		"consume": "boost attack 20 600000"
+	},
+	"elixir_ataque_medio": {
+		"display_name": "Elixir de Ataque Médio",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_02f.png",
+		"description": "Um frasco com líquido laranja. Dizem que quem toma ganha um boost de ataque (+50 ATK por 10min)",
+		"consume": "boost attack 50 600000"
+	},
+	"elixir_ataque_grande": {
+		"display_name": "Elixir de Ataque Grande",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_03f.png",
+		"description": "Um frasco grande com líquido laranja. Dizem que quem toma ganha um grande boost de ataque (+100 ATK por 10min)",
+		"consume": "boost attack 100 600000"
+	},
+	"elixir_defesa_pequeno": {
+		"display_name": "Elixir de Defesa Pequeno",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_01e.png",
+		"description": "Um pequeno frasco com líquido roxo. Dizem que quem toma ganha um pequeno boost de defesa (+20 DEF por 10min)",
+		"consume": "boost defense 20 600000"
+	},
+	"elixir_defesa_medio": {
+		"display_name": "Elixir de Defesa Médio",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_02e.png",
+		"description": "Um frasco com líquido roxo. Dizem que quem toma ganha um boost de defesa (+50 DEF por 10min)",
+		"consume": "boost defense 50 600000"
+	},
+	"elixir_defesa_grande": {
+		"display_name": "Elixir de Defesa Grande",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_03e.png",
+		"description": "Um frasco grande com líquido roxo. Dizem que quem toma ganha um grande boost de defesa (+100 DEF por 10min)",
+		"consume": "boost defense 100 600000"
+	},
+	"elixir_vitalidade_pequeno": {
+		"display_name": "Elixir de Vitalidade Pequeno",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_01c.png",
+		"description": "Um pequeno frasco com líquido verde. Dizem que quem toma ganha um pequeno boost de vitalidade (+20 VIT por 10min)",
+		"consume": "boost max_health 20 600000"
+	},
+	"elixir_vitalidade_medio": {
+		"display_name": "Elixir de Vitalidade Médio",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_02c.png",
+		"description": "Um frasco com líquido verde. Dizem que quem toma ganha um boost de vitalidade (+50 VIT por 10min)",
+		"consume": "boost max_health 50 600000"
+	},
+	"elixir_vitalidade_grande": {
+		"display_name": "Elixir de Vitalidade Grande",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/potion_03c.png",
+		"description": "Um frasco grande com líquido verde. Dizem que quem toma ganha um grande boost de vitalidade (+100 VIT por 10min)",
+		"consume": "boost max_health 100 600000"
+	},
+	
+	"presente_vermelho": {
+		"display_name": "Presente Vermelho",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/gift_01a.png",
+		"description": "Um presente! O que será que tem dentro? Rank: 1"
+	},
+	"presente_verde": {
+		"display_name": "Presente Verde",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/gift_01b.png",
+		"description": "Um presente! O que será que tem dentro? Rank: 2"
+	},
+	"presente_branco": {
+		"display_name": "Presente Branco",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/gift_01c.png",
+		"description": "Um presente! O que será que tem dentro? Rank: 3"
+	},
+	"presente_azul": {
+		"display_name": "Presente Azul",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/gift_01e.png",
+		"description": "Um presente! O que será que tem dentro? Rank: 4"
+	},
+	"presente_amarelo": {
+		"display_name": "Presente Amarelo",
+		"type": "consumable",
+		"thumbnail": "/assets/icons/gift_01f.png",
+		"description": "Um presente! O que será que tem dentro? Rank: 5"
+	}
+}

@@ -1,9 +1,22 @@
 let fs = require("fs");
 
-function heal(character, amount){
-	character.health += amount;
-	character.health = Math.min(character.health, character.getAttribute("max_health"));
+let funcs = {
+	heal: function(character, params){
+		character.health += Number(params[1]);
+		character.health = Math.min(character.health, character.getAttribute("max_health"));
+	},
+	boost: function(character, params){
+		character[params[1]] += params[2];
+		
+		setTimeout(() => {
+			character[params[1]] -= params[2];
+			character.revalidate();
+		}, Number(params[3]));
+	}
+	
 }
+
+
 
 let items = {
 	"equip": function equip(character, item){
@@ -15,29 +28,19 @@ let items = {
 			character[eq.slot] = item;
 		}
 	},
-	//Consumiveis
-	"pocao_pequena": {
-		"display_name": "Poção Pequena",
-		"type": "consumable",
-		"description": "Uma pequena poção vermelha que recupera 100 pontos de vida",
-		"thumbnail": "/assets/icons/potion_01a.png",
-		"consume": (character) => heal(character, 100)
-	},
-	"pocao_media": {
-		"display_name": "Poção Média",
-		"type": "consumable",
-		"thumbnail": "/assets/icons/potion_02a.png",
-		"description": "Uma poção vermelha que recupera 200 pontos de vida",
-		"consume": (character) => heal(character, 200)
-	},
-	"pocao_grande": {
-		"display_name": "Poção Grande",
-		"type": "consumable",
-		"thumbnail": "/assets/icons/potion_03a.png",
-		"description": "Uma grande poção vermelha que recupera 500 pontos de vida",
-		"consume": (character) => heal(character, 500)
-	},
+	"consume": function(character, item){
+		let eq = items[item];
+		if(eq.consume){
+			if(character.removeItem(item, 1)){
+				let toks = eq.consume.split("\n");
+				funcs[toks[0]](character, toks);
+			}
+		}
+	}
 }
+
+let consumables = JSON.parse(fs.readFileSync('data/consumables.json', 'utf-8'));
+items = Object.assign(items, consumables);
 
 let armors = JSON.parse(fs.readFileSync('data/armors.json', 'utf-8'));
 items = Object.assign(items, armors);

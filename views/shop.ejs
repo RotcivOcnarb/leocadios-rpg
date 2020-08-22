@@ -1,0 +1,93 @@
+<%- include("header.ejs") %>
+
+
+
+	<% 
+		
+	let dt = new Date();
+	function randArray(array, count){
+		let cpy = [...array];
+		let res = [];
+		
+		if(array.length < count) return [];
+		if(array.length == count) return cpy;
+		
+		for(var id = 0; id < count; id++){
+			let rng = seedrandom.alea(dt.getDate() + "/" + dt.getMonth() + "/" + dt.getYear() + "-" + id).double();	
+			let ii = Math.floor(rng * cpy.length);
+			res.push(cpy[ii]);
+			cpy.splice(ii, 1);
+		}
+				
+		return res;
+	}
+	
+	
+	%>
+
+	<div class="container w-75">
+
+		<div class="row justify-content-md-center">
+			<div class="col-md-auto">
+				<h1 class="character-title">Loja</h1>
+			</div>
+		</div>
+		<% for(var s in Object.keys(shop)){
+			let sh = shop[Object.keys(shop)[s]];
+		%>
+		<div style="margin:50px">
+			<hr>
+			
+			<div class="row justify-content-md-center">
+				<div class="col-md-auto">
+					<h3 class="character-title"><%=Object.keys(shop)[s]%></h3>
+				</div>
+			</div>
+			
+			<div class="row justify-content-md-center">
+				<div class="col-md-auto">
+					<img class="pix npc img-fluid" src="<%=sh.thumbnail%>"></img>
+
+				</div>
+				<div class="col-md-auto" style="padding: 25px">
+					<div class="speech"><%=sh.text%></div>
+				</div>
+				
+			</div>
+			<div class="row justify-content-md-center">
+				<div class="col-md-auto">
+					<div class="row justify-content-center" style="margin: 20px;">
+						<% 
+						let shop_items = sh.items;	
+						if(sh.type == "random")
+							shop_items = randArray(sh.items, sh.item_count); 
+							
+							for(var i in shop_items){ 
+							let item = items[shop_items[i]];
+							%>
+							<div class="col-md-auto" style="margin: 20px;">
+								<div class="row">
+									<img src="<%=item.thumbnail%>" class="col square pix fixed-width" style="border: 1px solid white"></img>
+								</div>
+								<div class="row">
+									<div class="col-md-auto " style="padding:0">
+										<img src= "/assets/icons/coin_03d.png"></img>
+									</div>
+									<div class="col-md-auto align-self-center d-table" style="padding: 0">
+										<h3 style="margin: auto;">300</h3>
+									</div>
+								</div>
+							</div>
+						<% } %>
+					
+					</div>
+
+				</div>
+			</div>
+		<div>
+		<%} %>
+
+	</div>
+
+
+<%- include("footer.ejs") %>

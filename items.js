@@ -32,7 +32,7 @@ let items = {
 		let eq = items[item];
 		if(eq.consume){
 			if(character.removeItem(item, 1)){
-				let toks = eq.consume.split("\n");
+				let toks = eq.consume.split(" ");
 				funcs[toks[0]](character, toks);
 			}
 		}

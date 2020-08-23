@@ -81,6 +81,9 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 					client.say(channel, speech);
 					return;
 				}
+				if(r && result == "error"){
+					client.say(channel, display_name + " tentou MATAR o rotsbots com suas bruxarias e comandos errados. Não sei o que houve, mas sua batalha foi cancelada, se fode ae");
+				}
 			}
 
 			//enquanto um dos dois não morrer:
@@ -115,6 +118,7 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 
 function enemyAct(character, display_name, client, channel, combat_log, boss){
 	let combat = combats[character.twitch_id];
+	if(!combat) return {"result": "error"};
 	let enemy = combat.enemy;
 	
 	// Inimigo inicia o combate

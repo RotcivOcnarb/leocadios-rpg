@@ -209,6 +209,7 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			console.log("[" + view_bonus + "]");
 			let exp = Math.floor((view_bonus/100.0 + 1) * enemy.exp);
 			let cns = Math.floor((view_bonus/100.0 + 1) * enemy.coins);
+			console.log("[" + (view_bonus/100.0 + 1) +"]")
 			console.log("[" + enemy.exp + ", "+exp+"]");
 			if(character.mod) exp *= 10;
 			if(character.sub) exp *= 2;

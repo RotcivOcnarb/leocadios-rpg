@@ -205,14 +205,13 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			//encerra o combate e recompensa o jogador
 			delete combats[character.twitch_id];
 			
-			let view_bonus = (view_count * 10);
-			console.log("[" + view_bonus + "]");
+			let view_bonus = (view_count * 100);
+			
+			if(character.mod) view_bonus *= 4;
+			if(character.sub) view_bonus *= 2;
+			
 			let exp = Math.floor((view_bonus/100.0 + 1) * enemy.exp);
 			let cns = Math.floor((view_bonus/100.0 + 1) * enemy.coins);
-			console.log("[" + (view_bonus/100.0 + 1) +"]")
-			console.log("[" + enemy.exp + ", "+exp+"]");
-			if(character.mod) exp *= 10;
-			if(character.sub) exp *= 2;
 			
 			character.experience += exp;
 			character.coins += cns;

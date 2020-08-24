@@ -275,6 +275,9 @@
 					[stats]
 				</div>
 			</div>
+			<div id="t-level" class="row tooltip-row">
+				[level]
+			</div>
 			<div id="t-item-type" class="row tooltip-row">
 				[item-type]
 			</div>
@@ -313,6 +316,7 @@
 				
 				$("#t-command").hide();
 				$("#t-stats").hide();
+				$("#t-level").hide();
 				
 				switch(obj.type){
 					case "consumable":
@@ -327,6 +331,8 @@
 						$("#t-command").show();
 						$("#t-command").html(command);
 						$("#t-stats").show();
+						$("#t-level").show();
+						$("#t-level").html("Level: " + obj.level);
 						
 						//Calcula a diferença entre o item q eu to passando o mouse em cima, e o item equipado (se tiver algum)
 						let atck_dt = obj.attack - (character[obj.slot] ? items[character[obj.slot]].attack : 0);

@@ -47,6 +47,10 @@
 	
 }
 
+.p-none{
+	pointer-events: none;
+}
+
 #base-visu{
 	top: 150px;
 	left: 40px;

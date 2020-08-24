@@ -1,17 +1,34 @@
 let fs = require("fs");
 
 let funcs = {
-	heal: function(character, params){
+	heal: function(character, params, item){
 		character.health += Number(params[1]);
 		character.health = Math.min(character.health, character.getAttribute("max_health"));
+		return character.display_name + " teve sua vida recuperada em " + Number(params[1]) + " pontos de vida";
 	},
-	boost: function(character, params){
-		character[params[1]] += params[2];
+	boost: function(character, params, item){
 		
-		setTimeout(() => {
-			character[params[1]] -= params[2];
-			character.revalidate();
-		}, Number(params[3]));
+		character.boost.push({
+			"timestamp": Date.now(),
+			"attribute": params[1],
+			"points": Number(params[2]),
+			"duration": Number(params[3])
+		});
+		
+		character[params[1]] += Number(params[2]);
+
+		return character.display_name + " recebeu um bonus de " + params[2] + " pontos no atributo [" + params[1] + "] por " + Math.floor(Number(params[3]) / 1000) + " segundos";
+	},
+	drop: function(character, params, item){
+		let rate = Number(params[1]);
+		let dps = [];
+		for(i in item.drops){
+			if(Math.random() <= rate){
+				character.giveItem(item.drops[i], 1);
+				dps.push(items[item.drops[i]].display_name);
+			}
+		}
+		return character.display_name + " abriu " + item.display_name + " e recebeu os items: " + JSON.stringify(dps);
 	}
 	
 }
@@ -33,7 +50,7 @@ let items = {
 		if(eq.consume){
 			if(character.removeItem(item, 1)){
 				let toks = eq.consume.split(" ");
-				funcs[toks[0]](character, toks);
+				return funcs[toks[0]](character, toks, eq);
 			}
 		}
 	}

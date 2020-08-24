@@ -22,8 +22,112 @@
 		return res;
 	}
 	
-	
 	%>
+	
+	<div id="tooltip" style="display: none; pointer-events: none;">
+		<div id="t-title" class="row tooltip-row" style="font-size: 24px">
+			[title]
+		</div>
+		<div id="t-description" class="row tooltip-row">
+			[description]
+		</div>
+		<div id="t-stats" class="row tooltip-row" style="display: none;">
+			<div class="col">
+				[stats]
+			</div>
+		</div>
+		<div id="t-level" class="row tooltip-row">
+			[level]
+		</div>
+		<div id="t-item-type" class="row tooltip-row">
+			[item-type]
+		</div>
+		<div id="t-command" class="row tooltip-row" style="display: none;">
+			[command]
+		</div>
+		
+	</div>
+			
+	<script>
+	
+	function mouseEnter(){
+		$("#tooltip").show();
+	}
+	
+	function mouseExit(){
+		$("#tooltip").hide();
+		console.log("exit");
+	}
+	
+	function mouseMove(event, obj, item){
+		
+		var scrollPos = $(window).scrollTop();
+		
+		$("#tooltip").css({ 
+			position: "absolute",
+			marginLeft: 0, marginTop: 0,
+			left: event.clientX + 30,
+			top: event.clientY + scrollPos - $("#tooltip").height()
+		}).appendTo('body');
+		
+		let items = <%- JSON.stringify(items)%>;
+		
+		let type = "";
+		let command = ">comprar " + item + " QUANTIDADE";
+		
+		$("#t-command").hide();
+		$("#t-stats").hide();
+		$("#t-level").hide();
+
+		switch(obj.type){
+			case "consumable":
+				type = "Consumível";
+				$("#t-command").show();
+				$("#t-command").html(command);
+			break;
+			case "equipment":
+				type = "Equipamento";
+				$("#t-command").show();
+				$("#t-command").html(command);
+				$("#t-stats").show();
+				$("#t-level").show();
+				$("#t-level").html("Level: " + obj.level);
+			break;
+		}
+		
+		let st = "";
+	
+		if(obj.attack > 0){
+			st += "<div class='row'>Ataque: " + obj.attack + "</div>";
+		}
+		
+		if(obj.defense > 0){
+			st += "<div class='row'>Defesa: " + obj.defense + "</div>"
+		}
+		
+		if(obj.critic > 0){
+			st += "<div class='row'>Crítico: " + obj.critic + "</div>"
+		}
+		
+		if(obj.velocity > 0){
+			st += "<div class='row'>Velocidade: " + obj.velocity + "</div>"
+		}
+		
+		if(obj.versatility > 0){
+			st += "<div class='row'>Versatilidade: " + obj.versatility + "</div>"
+		}
+		
+		if(obj.max_health > 0){
+			st += "<div class='row'>Vitalidade: " + obj.max_health + "</div>"
+		}
+						
+		$("#t-stats .col").html(st);
+		$("#t-title").html(obj.display_name);
+		$("#t-description").html(obj.description);
+		$("#t-item-type").html(type);
+	}
+	
+	</script>
 
 	<div class="container w-75">
 
@@ -54,6 +158,7 @@
 				</div>
 				
 			</div>
+			
 			<div class="row justify-content-md-center">
 				<div class="col-md-auto">
 					<div class="row justify-content-center" style="margin: 20px;">
@@ -62,32 +167,47 @@
 						if(sh.type == "random")
 							shop_items = randArray(sh.items, sh.item_count); 
 							
-							for(var i in shop_items){ 
-							let item = items[shop_items[i]];
-							%>
+						shop_items.sort((a, b) => {
+							return items[a].shop_price - items[b].shop_price;
+						});
+						
+						for(var i in shop_items){ 
+						let item = items[shop_items[i]];
+						%>
 							<div class="col-md-auto" style="margin: 20px;">
 								<div class="row">
-									<img src="<%=item.thumbnail%>" class="col square pix fixed-width" style="border: 1px solid white"></img>
+									<img src="<%=item.thumbnail%>" class="col square pix fixed-width" style="border: 1px solid white"
+									onmousemove='mouseMove(event, <%=JSON.stringify(item)%>, "<%=shop_items[i]%>")' onmouseenter="mouseEnter()" 
+									onmouseleave="mouseExit()"></img>
 								</div>
+								<% if(item.shop_price){ %>
 								<div class="row">
 									<div class="col-md-auto " style="padding:0">
 										<img src= "/assets/icons/coin_03d.png"></img>
 									</div>
 									<div class="col-md-auto align-self-center d-table" style="padding: 0">
-										<h3 style="margin: auto;">300</h3>
+										<h3 style="margin: auto;"><%=item.shop_price%></h3>
 									</div>
 								</div>
+								<%}%>
+								<% if(item.morc_price){ %>
+								<div class="row">
+									<div class="col-md-auto " style="padding:0">
+										<img src= "/assets/icons/crystal_01j.png"></img>
+									</div>
+									<div class="col-md-auto align-self-center d-table" style="padding: 0">
+										<h3 style="margin: auto;"><%=item.morc_price%></h3>
+									</div>
+								</div>
+								<%}%>
 							</div>
 						<% } %>
 					
 					</div>
-
 				</div>
 			</div>
-		<div>
+		</div>
 		<%} %>
-
 	</div>
-
 
 <%- include("footer.ejs") %>

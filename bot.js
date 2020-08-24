@@ -5,6 +5,8 @@ const combat = require("./combat");
 const twitch = require("./twitch_api");
 const worlds = require("./data/worlds.json");
 const items = require("./items");
+const shop = require("./data/shop.json");
+const seedrandom = require("seedrandom");
 
 let REVIVER_REWARD = "d5d9d990-8b63-4611-86a8-5f4e83919565";
 
@@ -153,6 +155,10 @@ async function onMessageHandler (channel, context, msg, self, environment, strea
 	}
 
   
+	if(msg == ">loja"){
+		client.say(channel, "A loja pode ser acessada por esse link: https://leocadios-rpg.herokuapp.com/shop");
+	}
+  
 	let display_name = context['display-name'];
   	  
 	if(msg == ">criar personagem"){
@@ -209,7 +215,7 @@ async function onMessageHandler (channel, context, msg, self, environment, strea
 			combat.engageCombatRandom(character, display_name, client, channel, options.view_count);
 		}
 		
-		if(msg.startsWith(">item")){
+		if(msg.startsWith(">item ")){
 			if(!combat.isPlayerInCombat(character)){
 				
 				let tok = msg.split(" ");
@@ -218,8 +224,14 @@ async function onMessageHandler (channel, context, msg, self, environment, strea
 					if(character.inventory[tok[1]]){
 						
 						if(items[tok[1]].type == "consumable"){
-							items.consume(character, tok[1]);
-							client.say(channel, "Você consome o item " + items[tok[1]].display_name);
+							let sp = items.consume(character, tok[1]);
+							if(sp){
+								client.say(channel, sp);
+							}
+							else{
+								client.say(channel, "Você consome o item " + items[tok[1]].display_name);
+							}
+							
 						}
 						else{
 							client.say(channel, "O item " + items[tok[1]].display_name + " não é consumível!");
@@ -237,7 +249,7 @@ async function onMessageHandler (channel, context, msg, self, environment, strea
 			}
 		}
 		
-		if(msg.startsWith(">equipar")){
+		if(msg.startsWith(">equipar ")){
 			if(!combat.isPlayerInCombat(character)){
 				let tok = msg.split(" ");
 				
@@ -289,7 +301,7 @@ async function onMessageHandler (channel, context, msg, self, environment, strea
 			client.say(channel, speech);
 		}
 		
-		if(msg.startsWith(">mundo")){
+		if(msg.startsWith(">mundo ")){
 			let ks = msg.split(" ");
 			if(ks.length > 1){
 				if(worlds[ks[1]]){
@@ -304,7 +316,134 @@ async function onMessageHandler (channel, context, msg, self, environment, strea
 				client.say(channel, display_name + " está atualmente no mundo " + worlds[character.world].display_name + " [" + character.world + "]. Para mudar de mundo, use o comando >mundo nome_do_mundo");
 			}
 		}
-	}  
+
+		if(msg.startsWith(">comprar ")){
+			if(!combat.isPlayerInCombat(character)){
+				let toks = msg.split(" ");
+				if(toks.length >= 2){
+					let it = checkForItemInShop(toks[1]);
+					if(it){
+						
+						let qtd = 1;
+						if(Number(toks[2]) > 0){
+							qtd = Number(toks[2]);
+						}
+							
+						if(it.shop_price){
+							if(character.coins >= it.shop_price * qtd){
+								character.coins -= it.shop_price * qtd;
+								character.giveItem(toks[1], qtd);
+								client.say(channel, display_name + " acaba de comprar " + qtd + " " + it.display_name);
+							}
+							else{
+								client.say(channel, display_name + " não tem moedas o suficiente para comprar " + it.display_name + " (o item custa "+(it.shop_price * qtd)+" moedas)");
+							}
+						}
+						else if(it.morc_price){
+							if(character.morcs >= it.morc_price * qtd){
+								character.morcs -= it.morc_price * qtd;
+								character.giveItem(toks[1], qtd);
+								client.say(channel, display_name + " acaba de comprar " + qtd + " " + it.display_name);
+							}
+							else{
+								client.say(channel, display_name + " não tem Morcs o suficiente para comprar " + it.display_name + " (o item custa "+(it.morc_price * qtd)+" Morcs)");
+							}
+						}
+						else{
+							client.say(channel, "Por algum motivo, o item " + it.display_name + " não tem preço");
+						}
+					}
+					else{
+						client.say(channel, display_name + " tentou comprar o item " + toks[1] + ", mas não tem ninguém na loja vendendo esse item!");
+					}
+				}
+			}
+			else{
+				client.say(channel, "Você não pode comprar itens durante um combate!");
+			}
+		}
+	
+		if(msg.startsWith(">vender ")){
+			if(!combat.isPlayerInCombat(character)){
+				
+				let toks = msg.split(" ");
+				
+				if(toks.length >= 2){
+					if(character.inventory[toks[1]]){
+						
+						let qtd = 1;
+						if(Number(toks[2]) > 0){
+							qtd = Number(toks[2]);
+						}
+						let it = items[toks[1]];
+						if(character.inventory[toks[1]].stack >= qtd){
+						
+							
+							
+							if(it.shop_price){
+								character.removeItem(toks[1], qtd);
+								let c = Math.floor(it.shop_price * 0.8);
+								character.coins += c;
+								client.say(channel, display_name + " vende o item " + items[toks[1]].display_name + " por " + c + " moedas");
+							}
+							else if(it.morc_price){
+								client.say(channel, "Você não pode vender items de Morcs");
+							}
+							else{
+								client.say(channel, "Por algum motivo, o item " + it.display_name + " não tem preço");
+							}
+						}
+						else{
+							client.say(channel, display_name + " está tentando vender " + qtd + " " + it.display_name + ", mas ele só tem " + character.inventory[toks[1]].stack + " no inventário!");
+						}
+					}
+					else{
+						client.say(channel, "Não consegui encontrar o item " + toks[1] + " no inventário de " + display_name);
+					}
+				}
+				
+			}
+			else{
+				client.say(channel, "Você não pode vender itens durante um combate!");
+			}
+			
+		}
+	}
+	
+}
+
+function checkForItemInShop(item){
+	
+	for(s in shop){
+		let sh = shop[s];
+		
+		let shop_items = sh.items;	
+		if(sh.type == "random")
+			shop_items = randArray(sh.items, sh.item_count);
+		
+		if(shop_items.includes(item)){
+			return items[item];
+		}
+	}
+	
+}
+
+let dt = new Date();
+function randArray(array, count){
+	let cpy = [...array];
+	let res = [];
+	
+	if(array.length < count) return [];
+	if(array.length == count) return cpy;
+	
+	for(var id = 0; id < count; id++){
+		let rng = seedrandom.alea(dt.getDate() + "/" + dt.getMonth() + "/" + dt.getYear() + "-" + id).double();	
+		let ii = Math.floor(rng * cpy.length);
+		res.push(cpy[ii]);
+		cpy.splice(ii, 1);
+	}
+			
+	return res;
 }
 
 function onCheerHandler(channel, context, message){

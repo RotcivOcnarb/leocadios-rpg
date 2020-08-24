@@ -10,7 +10,7 @@ const { exec } = require("child_process");
 
 let environment = (process.env.NODE_ENV || "development");
 
-process.app_version = "v0.2";
+process.app_version = "v0.3";
 
 const bot = require("./bot");
 
@@ -55,7 +55,7 @@ app.get("/personagem", (req, res) => {
 		let allCharacters = database.getAllCharacters(req.query["env"], req.query["streamer"]);
 		
 		if(allCharacters[twitch_id]){
-			res.render("index", {
+			res.render("character", {
 				"allCharacters": allCharacters,
 				"character": allCharacters[twitch_id],
 				"items": items

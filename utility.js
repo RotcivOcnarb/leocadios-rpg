@@ -63,20 +63,26 @@ function generateItem(name, slot, level, thumbnail, desc){
 	}
 }
 
-const shop = require("./data/shop.json");
 const armors = require("./data/armors.json");
 const weapons = require("./data/weapons.json");
+const consumables = require("./data/consumables.json");
 
-for(var v in Object.keys(armors)){
-	var k = Object.keys(armors)[v];
+for(var a in Object.keys(armors)){
+	let key = Object.keys(armors)[a];
+	let armor = armors[key];
 	
-	shop["Ferreiro Tyson"].items.push(k);
+	armor.shop_price = Math.floor(Math.pow(armor.level, 1.3) * 100 * (Math.random() * 0.2 - 0.1 + 1));
+	armors[key] = armor;
 }
 
-for(var v in Object.keys(weapons)){
-	var k = Object.keys(weapons)[v];
+fs.writeFile("data/armors.json", JSON.stringify(armors, null, 2), ()=> console.log("Armors"));
+
+for(var a in Object.keys(weapons)){
+	let key = Object.keys(weapons)[a];
+	let weapon = weapons[key];
 	
-	shop["Ferreiro Tyson"].items.push(k);
+	weapon.shop_price = Math.floor(Math.pow(weapon.level, 1.3) * 100 * (Math.random() * 0.2 - 0.1 + 1));
+	weapons[key] = weapon;
 }
 
-fs.writeFile("./data/shop.json", JSON.stringify(shop, null, 2), (err) => console.log(err));
+fs.writeFile("data/weapons.json", JSON.stringify(weapons, null, 2), ()=> console.log("Weapon"));

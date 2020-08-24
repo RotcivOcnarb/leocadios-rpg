@@ -36,6 +36,22 @@ module.exports = class Character {
 		this.trinket = [];
 		
 		this.inventory = {};
+		this.boost = [];
+		
+		setInterval(() => {
+			
+			for(var b in this.boost){
+				if(this.boost[b]){
+					let elapsed = Date.now() - this.boost[b].timestamp;
+					if(elapsed > this.boost[b].duration){
+						let at = this.boost[b].attribute;
+						this[at] -= Number(this.boost[b].points);
+						delete this.boost[b];
+					}
+				}
+			}
+			
+		}, 1000);
 	}
 	
 	getAttribute(attr){
@@ -95,7 +111,8 @@ module.exports = class Character {
 			cm3: this.getAttribute("critic"),
 			cm4: this.getAttribute("versatility"),
 			cm5: this.getAttribute("velocity"),
-			cm6: this.getAttribute("max_health")
+			cm6: this.getAttribute("max_health"),
+			cm7: this.coins
 			
 		}).send();
 	}

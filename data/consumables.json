@@ -4,114 +4,305 @@
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_01a.png",
 		"description": "Uma pequena poção vermelha que recupera 100 pontos de vida",
-		"consume": "heal 100"
+		"consume": "heal 100",
+		"shop_price": 100
 	},
 	"pocao_media": {
 		"display_name": "Poção Média",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_02a.png",
 		"description": "Uma poção vermelha que recupera 200 pontos de vida",
-		"consume": "heal 200"
+		"consume": "heal 200",
+		"shop_price": 500
 	},
 	"pocao_grande": {
 		"display_name": "Poção Grande",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_03a.png",
 		"description": "Uma grande poção vermelha que recupera 500 pontos de vida",
-		"consume": "heal 500"
+		"consume": "heal 500",
+		"shop_price": 1000
 	},
 	"elixir_ataque_pequeno": {
 		"display_name": "Elixir de Ataque Pequeno",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_01f.png",
 		"description": "Um pequeno frasco com líquido laranja. Dizem que quem toma ganha um pequeno boost de ataque (+20 ATK por 10min)",
-		"consume": "boost attack 20 600000"
+		"consume": "boost attack 20 600000",
+		"shop_price": 350
 	},
 	"elixir_ataque_medio": {
 		"display_name": "Elixir de Ataque Médio",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_02f.png",
 		"description": "Um frasco com líquido laranja. Dizem que quem toma ganha um boost de ataque (+50 ATK por 10min)",
-		"consume": "boost attack 50 600000"
+		"consume": "boost attack 50 600000",
+		"shop_price": 700
 	},
 	"elixir_ataque_grande": {
 		"display_name": "Elixir de Ataque Grande",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_03f.png",
 		"description": "Um frasco grande com líquido laranja. Dizem que quem toma ganha um grande boost de ataque (+100 ATK por 10min)",
-		"consume": "boost attack 100 600000"
+		"consume": "boost attack 100 600000",
+		"shop_price": 1100
 	},
 	"elixir_defesa_pequeno": {
 		"display_name": "Elixir de Defesa Pequeno",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_01e.png",
 		"description": "Um pequeno frasco com líquido roxo. Dizem que quem toma ganha um pequeno boost de defesa (+20 DEF por 10min)",
-		"consume": "boost defense 20 600000"
+		"consume": "boost defense 20 600000",
+		"shop_price": 300
 	},
 	"elixir_defesa_medio": {
 		"display_name": "Elixir de Defesa Médio",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_02e.png",
 		"description": "Um frasco com líquido roxo. Dizem que quem toma ganha um boost de defesa (+50 DEF por 10min)",
-		"consume": "boost defense 50 600000"
+		"consume": "boost defense 50 600000",
+		"shop_price": 600
 	},
 	"elixir_defesa_grande": {
 		"display_name": "Elixir de Defesa Grande",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_03e.png",
 		"description": "Um frasco grande com líquido roxo. Dizem que quem toma ganha um grande boost de defesa (+100 DEF por 10min)",
-		"consume": "boost defense 100 600000"
+		"consume": "boost defense 100 600000",
+		"shop_price": 900
 	},
 	"elixir_vitalidade_pequeno": {
 		"display_name": "Elixir de Vitalidade Pequeno",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_01c.png",
 		"description": "Um pequeno frasco com líquido verde. Dizem que quem toma ganha um pequeno boost de vitalidade (+20 VIT por 10min)",
-		"consume": "boost max_health 20 600000"
+		"consume": "boost max_health 20 600000",
+		"shop_price": 250
 	},
 	"elixir_vitalidade_medio": {
 		"display_name": "Elixir de Vitalidade Médio",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_02c.png",
 		"description": "Um frasco com líquido verde. Dizem que quem toma ganha um boost de vitalidade (+50 VIT por 10min)",
-		"consume": "boost max_health 50 600000"
+		"consume": "boost max_health 50 600000",
+		"shop_price": 550
 	},
 	"elixir_vitalidade_grande": {
 		"display_name": "Elixir de Vitalidade Grande",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/potion_03c.png",
 		"description": "Um frasco grande com líquido verde. Dizem que quem toma ganha um grande boost de vitalidade (+100 VIT por 10min)",
-		"consume": "boost max_health 100 600000"
+		"consume": "boost max_health 100 600000",
+		"shop_price": 1000
 	},
 	
 	"presente_vermelho": {
 		"display_name": "Presente Vermelho",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/gift_01a.png",
-		"description": "Um presente! O que será que tem dentro? Rank: 1"
+		"description": "Um presente! O que será que tem dentro? (Qualquer drop do Vale da Lua)",
+		"morc_price": 100,
+		"consume": "drop 0.1",
+		"drops": [
+			"touquinha_legal",
+			"camisa_verde",
+			"calca_azul",
+			"pano_para_os_pes",
+			"espada_comum",
+			"espada_curta",
+			"espada_fraca",
+			"capacete_de_barro",
+			"colete_esfarrapado",
+			"calcas_esfarrapadas",
+			"botinhas_podres",
+			"espada_firme",
+			"espada_basica",
+			"espada_rustica",
+			"curta_de_ouro",
+			"pequena_bronze",
+			"firme_enferrujada",
+			"espada_pequena",
+			"firme_de_bronze",
+			"pisantes_de_couro",
+			"calca_marrom",
+			"colete_de_couro",
+			"capuz_de_couro",
+			"pequena_bronze",
+			"firme_enferrujada",
+			"espada_pequena",
+			"firme_de_bronze",
+			"pisantes_de_couro",
+			"calca_marrom",
+			"colete_de_couro",
+			"capuz_de_couro",
+			"espada_curvada",
+			"espada_fina",
+			"espada_guerreiro",
+			"capacete_enferrujado",
+			"peitoral_enferrujado",
+			"coxotes_enferrujados",
+			"pisantes_macios",
+			"rustica_brilhosa",
+			"espada_pesada",
+			"comum_bronze",
+			"lamina_dourada"
+		]
 	},
 	"presente_verde": {
 		"display_name": "Presente Verde",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/gift_01b.png",
-		"description": "Um presente! O que será que tem dentro? Rank: 2"
+		"description": "Um presente! O que será que tem dentro? (Qualquer drop do Recanto dos Geodos)",
+		"morc_price": 200,
+		"consume": "drop 0.1",
+		"drops": [
+			"botas_de_guarda",
+			"calcas_de_guarda",
+			"peitoral_de_guarda",
+			"capacete_de_guarda",
+			"curta_de_latao",
+			"pesada_ouro",
+			"espada_enfraquecida",
+			"curta_de_prata",
+			"firme_de_ferro",
+			"comum_pepita",
+			"espada_lanca",
+			"espada_chamas",
+			"firme_brilhante",
+			"espada_de_ferro_encantada",
+			"cimitarra_do_fogo_eterno",
+			"capacete_da_noite",
+			"peitoral_da_noite",
+			"calcas_da_noite",
+			"botas_da_noite",
+			"capacete_da_furia_ardente",
+			"peitoral_da_furia_ardente",
+			"coxotes_da_furia_ardente",
+			"botas_da_furia_ardente",
+			"punhal_de_gelo",
+			"espada_sapo",
+			"verde_esmeralda",
+			"lamina_de_lamina"
+		]
 	},
 	"presente_branco": {
 		"display_name": "Presente Branco",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/gift_01c.png",
-		"description": "Um presente! O que será que tem dentro? Rank: 3"
+		"description": "Um presente! O que será que tem dentro? (Qualquer drop do Santuário Espectral)",
+		"morc_price": 300,
+		"consume": "drop 0.1",
+		"drops": [
+			"capacete_da_forca",
+			"peitoral_da_forca",
+			"calcas_da_forca",
+			"pisantes_da_forca",
+			"espada_longa_da_sobriedade",
+			"rainha_de_gelo",
+			"salmao",
+			"espada_de_ferro_de_qualidade",
+			"lamina_do_fogo_gelido",
+			"vanish",
+			"montante_grosso",
+			"zeus_iii",
+			"espada_da_besta",
+			"montante_grosso_encantado",
+			"lamina_escura",
+			"capacete_elemental",
+			"peitoral_elemental",
+			"coxotes_elementais",
+			"pisantes_elementais",
+			"lamina_da_alma_corrompida",
+			"lamina_da_luxuria",
+			"amarelo_pastel",
+			"capacete_da_meditação",
+			"colete_da_meditacao",
+			"calcas_da_meditacao",
+			"botas_da_meditação",
+			"florete_avancado",
+			"florete_de_ouro",
+			"o_linguarudo",
+			"espada_dourada_da_sorte"
+		]
 	},
 	"presente_azul": {
 		"display_name": "Presente Azul",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/gift_01e.png",
-		"description": "Um presente! O que será que tem dentro? Rank: 4"
+		"description": "Um presente! O que será que tem dentro? (Qualquer drop da Montanha Laval)",
+		"morc_price": 400,
+		"consume": "drop 0.1",
+		"drops": [
+			"capacete_da_escuridao",
+			"colete_da_escuridao",
+			"calcas_da_escuridao",
+			"botas_da_escuridao",
+			"ferro_gay",
+			"florete_incandescente",
+			"espada_de_esgrima",
+			"montante_ciumento",
+			"lamina_de_sirus",
+			"lamina_amazonica",
+			"punho_vibrante",
+			"lamina_ostentativa",
+			"relampago_feroz",
+			"lamina_da_serpente",
+			"capuz_do_cla_de_sangue",
+			"peitoral_do_cla_de_sangue",
+			"coxotes_do_cla_de_sangue",
+			"pisantes_do_cla_de_sangue",
+			"punhal_de_gelo_eterno",
+			"punhal_encantado",
+			"florete_lunar",
+			"espada_roxa",
+			"capacete_feral",
+			"colete_feral",
+			"coxotes_ferais",
+			"botas_ferais",
+			"cimitarra_flamejante",
+			"espada_da_penumbra",
+			"montante_gelido",
+			"lamina_de_ametista"
+		]
 	},
 	"presente_amarelo": {
 		"display_name": "Presente Amarelo",
 		"type": "consumable",
 		"thumbnail": "/assets/icons/gift_01f.png",
-		"description": "Um presente! O que será que tem dentro? Rank: 5"
+		"description": "Um presente! O que será que tem dentro? (Qualquer drop do Planalto Aquamarine)",
+		"morc_price": 500,
+		"consume": "drop 0.1",
+		"drops": [
+			"capacete_de_cristal",
+			"peitoral_de_cristal",
+			"calcas_de_cristal",
+			"pisantes_de_cristal",
+			"espada_solar",
+			"espada_curta_da_furia",
+			"claymore_de_papel",
+			"a_estalactite",
+			"lamina_de_carmesim",
+			"claymore_de_fogo",
+			"espada_digna",
+			"claymore_de_esmeralda",
+			"espada_do_metalurgico",
+			"sapo_brilhante",
+			"montante_grosso_ii",
+			"capacete_mundial",
+			"colete_mundial",
+			"calcas_mundiais",
+			"botas_mundiais",
+			"espada_envenenada",
+			"lamina_reforjada",
+			"espada_da_clarividencia",
+			"claymore_avancado",
+			"capuz_oculto",
+			"peitoral_oculto",
+			"coxotes_ocultos",
+			"pisantes_ocultos",
+			"punhal_sagrado",
+			"punhal_da_dor",
+			"claymore_do_pozinho_magico"
+		]
 	}
 }

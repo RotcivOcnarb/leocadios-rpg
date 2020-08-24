@@ -1,11 +1,4 @@
 {
-  "Viajante Oculto": {
-    "thumbnail": "/assets/shop vendors/cultist.png",
-    "text": "Trago items diferentes das terras longínquas de onde venho. Todo o dia meu estoque atualiza",
-    "type": "random",
-    "item_count": 5,
-    "items": []
-  },
   "Sirena, a Alquimista": {
     "thumbnail": "/assets/shop vendors/alchemist.png",
     "text": "Minhas poções são as mais efetivas que você vai encontrar. E além disso eu tenho de tudo!",

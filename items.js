@@ -8,6 +8,10 @@ let funcs = {
 	},
 	boost: function(character, params, item){
 		
+		if(!character.boost){
+			character.boost = [];
+		}
+		
 		character.boost.push({
 			"timestamp": Date.now(),
 			"attribute": params[1],

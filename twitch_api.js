@@ -4,24 +4,18 @@ const https = require("https");
 
 let access_token = "";
 
-request_access_token(function(access_token){
-	getLiveViewCount(() => {});
-	//getBotID();
-	
-});
-
-function getLiveViewCount(callback){
+function getLiveViewCount(callback, streamer){
 	
 	if(access_token == ""){
 		request_access_token((access_token) => {
-			_getLive(access_token, (live) => {
+			_getLive(access_token, streamer, (live) => {
 				if(live) callback(live.viewer_count);
 				else callback(0);
 			});
 		});
 	}
 	else{
-		_getLive(access_token, (live) => {
+		_getLive(access_token, streamer, (live) => {
 			if(live) callback(live.viewer_count);
 			else callback(0);
 		});
@@ -79,12 +73,10 @@ function getBotID(){
 
 //
 
-function _getLive(access_token, callback){
-	
-	
+function _getLive(access_token, streamer, callback){	
 	let req = https.request({
 		host: "api.twitch.tv",
-		path: "/helix/streams?user_id=106700788",
+		path: "/helix/streams?first=1&user_login="+streamer,
 		method: "GET",
 		headers: {"Client-ID": "mfko21ti9vhpzbpkgbb7lse4yxl7cu", "Authorization": "Bearer " + access_token}
 	}, function(response){

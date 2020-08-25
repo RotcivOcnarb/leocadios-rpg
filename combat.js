@@ -4,13 +4,13 @@ const worlds = require("./data/worlds.json");
 const enemies = require("./data/enemies.json");
 const items = require("./items");
 
-function engageCombatWithBoss(character, display_name, client, channel, view_count){
+function engageCombatWithBoss(character, say, view_count){
 	let world = worlds[character.world];
 	let enemy = enemies[world.boss];
-	engageCombat(character, display_name, client, channel, view_count, enemy, true);
+	engageCombat(character, say, view_count, enemy, true);
 }
 
-function engageCombatRandom(character, display_name, client, channel, view_count){
+function engageCombatRandom(character, say, view_count){
 	let world = worlds[character.world];
 	
 	let l = clamp(character.level, world.level_range[0], world.level_range[1]);
@@ -18,21 +18,21 @@ function engageCombatRandom(character, display_name, client, channel, view_count
 	let enemy = enemies[rng_array(world.enemies)];
 	while(enemy.level != l) enemy = enemies[rng_array(world.enemies)];
 	
-	engageCombat(character, display_name, client, channel, view_count, enemy, false);
+	engageCombat(character, say, view_count, enemy, false);
 
 }
 
-function engageCombat(character, display_name, client, channel, view_count, enemy, boss){
+function engageCombat(character, say, view_count, enemy, boss){
 	if(combats[character.twitch_id]){
 		let remaining = combats[character.twitch_id].duration - Math.floor((Date.now() - combats[character.twitch_id].timestamp)/1000);
-		client.say(channel, display_name + ", você JÁ ESTÁ em um combate! Ainda restam mais " + remaining + " segundos para seu combate terminar. Você pode fugir durante esse tempo usando o comando >correr");
+		say(character.display_name + ", você JÁ ESTÁ em um combate! Ainda restam mais " + remaining + " segundos para seu combate terminar. Você pode fugir durante esse tempo usando o comando >correr");
 		//Já tá num combate
 		return false;
 	}
 	else{
 		//Checa se ele não tá morto
 		if(character.health <= 0){
-			client.say(channel, display_name + ", você não pode entrar em um combate pois você está MORTO, espere sua vida encher enquanto assiste a live!");
+			say(character.display_name + ", você não pode entrar em um combate pois você está MORTO, espere sua vida encher enquanto assiste a live!");
 			return false;
 		}
 		
@@ -68,35 +68,35 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 		
 		
 		
-		let speech = display_name + " acaba de encontrar um " + enemy.display_name.toUpperCase() + " de nível " + enemy.level + "! --- A batalha durará " + wait + " segundos";
+		let speech = character.display_name + " acaba de encontrar um " + enemy.display_name.toUpperCase() + " de nível " + enemy.level + "! --- A batalha durará " + wait + " segundos";
 		
-		client.say(channel, speech);
+		say(speech);
 				
 		setTimeout( () => {
 			speech = "";
 			if(!ps){
-				let r = enemyAct(character, display_name, client, channel, combat_log, boss);
+				let r = enemyAct(character, say, combat_log, boss);
 				if(r && r.result == "lost"){
-					speech += display_name + " está MORTO. Para recuperar vida, continue assistindo a live! -- Gostaria de ver o log de batalha? use o comando >log";
-					client.say(channel, speech);
+					speech += character.display_name + " está MORTO. Para recuperar vida, continue assistindo a live! -- Gostaria de ver o log de batalha? use o comando >log";
+					say(speech);
 					return;
 				}
 				if(r && result == "error"){
-					client.say(channel, display_name + " tentou MATAR o rotsbots com suas bruxarias e comandos errados. Não sei o que houve, mas sua batalha foi cancelada, se fode ae");
+					say(character.display_name + " tentou MATAR o rotsbots com suas bruxarias e comandos errados. Não sei o que houve, mas sua batalha foi cancelada, se fode ae");
 				}
 			}
 
 			//enquanto um dos dois não morrer:
 			let rounds = 0;
 			while(rounds < 30){
-				let result = attack(character, display_name, client, channel, view_count, combat_log, boss);
+				let result = attack(character, say, view_count, combat_log, boss);
 				if(result){
 					if(result.result == "win"){
-						speech += display_name + " matou " + enemy.display_name.toUpperCase() +"! Ele ganhou " + result.exp + " pontos de experiência e " + result.cns + " moedas! ("+result.view_bonus+"% BONUS!) -- Gostaria de ver o log de batalha? use o comando >log";
+						speech += character.display_name + " matou " + enemy.display_name.toUpperCase() +"! Ele ganhou " + result.exp + " pontos de experiência e " + result.cns + " moedas! ("+result.view_bonus+"% BONUS!) -- Gostaria de ver o log de batalha? use o comando >log";
 						break;
 					}
 					else if(result.result == "lost"){
-						speech += display_name + " está MORTO. Para recuperar vida, continue assistindo a live! -- Gostaria de ver o log de batalha? use o comando >log";
+						speech += character.display_name + " está MORTO. Para recuperar vida, continue assistindo a live! -- Gostaria de ver o log de batalha? use o comando >log";
 						break;
 					}
 					else{
@@ -107,8 +107,8 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 				} //o próprio attack chama o enemy act
 				rounds++;
 			}
-			if(rounds == 30) speech += display_name + " demorou muito para matar o inimigo, e ele fugiu";
-			client.say(channel, speech);
+			if(rounds == 30) speech += character.display_name + " demorou muito para matar o inimigo, e ele fugiu";
+			say(speech);
 				
 		}, wait * 1000);
 
@@ -116,7 +116,7 @@ function engageCombat(character, display_name, client, channel, view_count, enem
 	}
 }
 
-function enemyAct(character, display_name, client, channel, combat_log, boss){
+function enemyAct(character, say, combat_log, boss){
 	let combat = combats[character.twitch_id];
 	if(!combat) return {"result": "error"};
 	let enemy = combat.enemy;
@@ -148,10 +148,10 @@ function enemyAct(character, display_name, client, channel, combat_log, boss){
 	
 	if(rec <= 0){
 		//MISS
-		combat_log.push("O inimigo " + enemy.display_name.toUpperCase() + " ataca " + display_name + ", porém ele ERRA o ataque!")
+		combat_log.push("O inimigo " + enemy.display_name.toUpperCase() + " ataca " + character.display_name + ", porém ele ERRA o ataque!")
 	}
 	else{
-		combat_log.push("O inimigo " + enemy.display_name.toUpperCase() + " ataca " + display_name + ", causando " + rec + " de dano!" + (cr ? "[CRÍTICO]" : ""));
+		combat_log.push("O inimigo " + enemy.display_name.toUpperCase() + " ataca " + character.display_name + ", causando " + rec + " de dano!" + (cr ? "[CRÍTICO]" : ""));
 		
 		character.health -= rec;
 		
@@ -167,7 +167,7 @@ function enemyAct(character, display_name, client, channel, combat_log, boss){
 	}
 }
 
-function attack(character, display_name, client, channel, view_count, combat_log, boss){	
+function attack(character, say, view_count, combat_log, boss){	
 	let combat = combats[character.twitch_id];
 	let enemy = combat.enemy;	
 	
@@ -196,11 +196,11 @@ function attack(character, display_name, client, channel, view_count, combat_log
 	
 	if(rec <= 0){
 		//MISS
-		combat_log.push(display_name  + " ataca " + enemy.display_name.toUpperCase() + ", porém ele ERRA o ataque!");
-		return enemyAct(character, display_name, client, channel, combat_log, boss);
+		combat_log.push(character.display_name  + " ataca " + enemy.display_name.toUpperCase() + ", porém ele ERRA o ataque!");
+		return enemyAct(character, say, combat_log, boss);
 	}
 	else{
-		combat_log.push(display_name  + " ataca " + enemy.display_name.toUpperCase() + ", causando " + rec + " de dano!" + (cr ? " [CRÍTICO]" : ""));
+		combat_log.push(character.display_name  + " ataca " + enemy.display_name.toUpperCase() + ", causando " + rec + " de dano!" + (cr ? " [CRÍTICO]" : ""));
 		
 		combat.enemy_health -= rec;
 		
@@ -221,8 +221,8 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			character.coins += cns;
 			
 			while(character.experience >= character.max_experience){
-				character.levelUp(display_name);
-				client.say(channel, display_name + " acaba de UPAR DE NÍVEL, e agora está no nível " + character.level + "!");
+				character.levelUp();
+				say(character.display_name + " acaba de UPAR DE NÍVEL, e agora está no nível " + character.level + "!");
 			}
 			
 			let drops = [];
@@ -242,7 +242,7 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			}
 			
 			if(drops.length > 0)
-				client.say(channel, enemy.display_name + " acaba de dropar os itens: " + drops.map((el) => "[" + items[el].display_name + "]").join(", "));
+				say(enemy.display_name + " acaba de dropar os itens: " + drops.map((el) => "[" + items[el].display_name + "]").join(", "));
 			
 			return {
 				"result": "win",
@@ -252,18 +252,18 @@ function attack(character, display_name, client, channel, view_count, combat_log
 			};
 		}
 		else{
-			return enemyAct(character, display_name, client, channel, combat_log, boss);
+			return enemyAct(character, say, combat_log, boss);
 		}
 	}
 }
 
-function flee(character, display_name, client, channel){
+function flee(character, say){
 	
 	if(isPlayerInCombat(character)){
 		let combat = combats[character.twitch_id];
 		let enemy = combat.enemy;	
 		
-		client.say(channel, display_name + " fica com medo e corre de " + enemy.display_name.toUpperCase() + ". Que medroso");
+		say(character.display_name + " fica com medo e corre de " + enemy.display_name.toUpperCase() + ". Que medroso");
 		
 		delete combats[character.twitch_id];
 
@@ -278,22 +278,22 @@ function flee(character, display_name, client, channel){
 			" começa a correr. Correr do que? Ninguém sabe..."
 		]
 		
-		client.say(channel, display_name + frases[Math.floor(Math.random() * frases.length)]);
+		say(character.display_name + frases[Math.floor(Math.random() * frases.length)]);
 	}
 	
 }
 
-function printCombatLog(character, display_name, client, channel){
+function printCombatLog(character, say){
 	let log = combat_logs[character.twitch_id];
 	if(log){
 		let speech = "";
 		for(var i = 0; i < log.length; i ++){
 			speech += log[i] + " -|- ";
 		}
-		client.say(channel, speech);
+		say(speech);
 	}
 	else{
-		client.say(channel, "Desculpa " + display_name + ", mas não houve nenhuma batalha recente");
+		say("Desculpa " + character.display_name + ", mas não houve nenhuma batalha recente");
 	}
 }
 

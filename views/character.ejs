@@ -323,8 +323,8 @@
 				$("#t-sell-price").hide();
 				
 				if(obj.shop_price){
-					$("#t-sell-price").hide();
-					$("#t-sell-price").html("Preço de venda: " + obj.shop_price);
+					$("#t-sell-price").show();
+					$("#t-sell-price").html("Preço de venda: " + Math.floor(obj.shop_price*0.8));
 				}
 				
 				switch(obj.type){

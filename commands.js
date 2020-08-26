@@ -50,6 +50,7 @@ let funcs = {
 	
 	/* == COMANDOS DE MOD == */
 	
+	//Deleta um personagem especificado
 	deletar: {
 		"role": "mod",
 		"params": 1,
@@ -59,6 +60,7 @@ let funcs = {
 		}
 	},
 	
+	//Dá um item pra um player especificado
 	dar: {
 		"role": "mod",
 		"params": 2,
@@ -76,6 +78,7 @@ let funcs = {
 	
 	/* == COMANDOS DE PERSONAGEM == */
 
+	//Cria um personagem novo
 	criar_personagem: {
 		exec: function(options){
 			
@@ -84,9 +87,9 @@ let funcs = {
 			}
 			else{
 				let mod = options.context.mod || (options.context.badges && options.context.badges.broadcaster == "1");
-				if(database.createNewCharacter(options.context["user-id"], false, mod, options.environment, options.streamer)){
+				if(database.createNewCharacter(options.context["user-id"], false, mod, options.streamer)){
 					options.say("Personagem de "+options.context["display-name"]+" criado com sucesso! Bem-vindo ao RPG do Gui Leocádio!");
-					database.saveDatabase(options.environment, options.streamer);
+					database.saveDatabase(options.streamer);
 				}
 				else{
 					options.say("Ocorreu um erro ao criar seu personagem, tente de novo mais tarde");
@@ -95,18 +98,21 @@ let funcs = {
 		}
 	},
 	
+	//Manda o link da pagina do personagem
 	personagem: {
 		character: true,
-		exec: (options) => options.say(`Para ver os status do personagem de ${options.character.display_name}, acesse esse link: https://leocadios-rpg.herokuapp.com/personagem/?id=${options.character.twitch_id}&env=${options.environment}&streamer=${options.streamer}`)
+		exec: (options) => options.say(`Para ver os status do personagem de ${options.character.display_name}, acesse esse link: https://leocadios-rpg.herokuapp.com/personagem/?id=${options.character.twitch_id}&streamer=${options.streamer}`)
 	},
 	
 	/* == COMANDOS INFORMATIVOS == */
 	
+	//Manda o link da loja
 	loja: {
 		exec: (options) => options.say("A loja pode ser acessada por esse link: https://leocadios-rpg.herokuapp.com/shop")
 		
 	},
 	
+	//Mensagens de tutorial
 	tutorial: {
 		exec: (options) => {
 			options.say("Bem-vindo ao RPG das Lives do Leocádio! Para começar é simples, crie um personagem com o comando >criar_personagem");
@@ -117,6 +123,7 @@ let funcs = {
 		}
 	},
 	
+	//Mostra o bonus atual
 	bonus: {
 		exec: (options) => {
 			options.say("A live está atualmente com aproximadamente " + options.view_count + " espectadores! Isso dá um bonus de " + (options.view_count*100) + "% em todo o XP e moedas ganhos durante a live!");
@@ -126,6 +133,7 @@ let funcs = {
 	
 	/* == COMANDOS DE INVENTÁRIO == */
 	
+	//Usa um item do inventário
 	item: {
 		character: true,
 		not_combat: true,
@@ -142,6 +150,7 @@ let funcs = {
 		}
 	},
 	
+	//Equipa um item do inventário
 	equipar: {
 		character: true,
 		not_combat: true,
@@ -160,16 +169,19 @@ let funcs = {
 	
 	/* == COMANDOS DE COMBATE == */
 	
+	//Luta com um bixo random do mundo do seu nivel
 	lutar: {
 		character: true,
 		exec: (options) => combat.engageCombatRandom(options.character, options.say, options.view_count)
 	},
 	
+	//Luta contra o boss do mundo
 	boss: {
 		character: true,
 		exec: (o) => combat.engageCombatWithBoss(o.character, say, o.view_count)
 	},
 	
+	//Se tiver no meio de uma batalha, desiste dela
 	correr: {
 		character: true,
 		exec: (o) => {
@@ -177,6 +189,7 @@ let funcs = {
 		}
 	},
 	
+	//Mostra o log de combate da ultima batalha
 	log: {
 		character: true,
 		not_combat: true,
@@ -185,6 +198,7 @@ let funcs = {
 	
 	/* == COMANDOS DE MUNDO == */
 	
+	//Mostra todos os mundos disponiveis
 	mundos: {
 		exec: (o) => {
 			let speech = " == MUNDOS DISPONÍVEIS == ";
@@ -200,6 +214,7 @@ let funcs = {
 		}
 	},
 	
+	//Mostra o mundo atual, ou teleporta pra algum mundo
 	mundo: {
 		character: true,
 		not_combat: true,
@@ -221,6 +236,7 @@ let funcs = {
 	
 	/* == COMANDOS DE COMPRA/VENDA == */
 	
+	//Compra um item da loja
 	comprar: {
 		character: true,
 		not_combat: true,
@@ -254,6 +270,7 @@ let funcs = {
 		}
 	},
 	
+	//Vender algum item do seu inventario
 	vender: {
 		character: true,
 		params: 1,
@@ -291,16 +308,16 @@ let funcs = {
 };
 
 module.exports = {
-	"query": function(tokens, context, say, environment, streamer, view_count){		
+	"query": function(tokens, context, say, streamer, view_count){		
 		let command = funcs[tokens[0]];
-		let allCharacters = database.getAllCharacters(environment, streamer);
+		let allCharacters = database.getAllCharacters(streamer);
 		let character = allCharacters[context['user-id']];
-		character.display_name = context["display-name"];
+		if(character) character.display_name = context["display-name"];
 
 		if(command){
 			if(command.character && !character){
 				//Para usar este comando, vc precisa de um personagem
-				say("Para usar este comando, "+character.display_name+" precisa de um personagem! Para criar um personagem use o comando >criar_personagem");
+				say("Para usar este comando, "+context['display-name']+" precisa de um personagem! Para criar um personagem use o comando >criar_personagem");
 			}
 			else {
 				if(perm(command, context)){
@@ -315,7 +332,6 @@ module.exports = {
 								"say": say,
 								"character": character,
 								"allCharacters": allCharacters,
-								"environment": environment,
 								"streamer": streamer,
 								"view_count": view_count
 							});

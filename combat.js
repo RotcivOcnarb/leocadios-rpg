@@ -86,10 +86,21 @@ function engageCombat(character, say, view_count, enemy, boss){
 				}
 			}
 
+			let xa = character.getAttribute("velocity");
+			let xb = enemy.velocity;
+
 			//enquanto um dos dois não morrer:
-			let rounds = 0;
-			while(rounds < 30){
-				let result = attack(character, say, view_count, combat_log, boss);
+			for(var rounds = 0; rounds < 30; rounds++){
+				
+				//Calcula de quem é o próximo round
+				let result;
+				let dim = Math.min(xa, xb);
+				if(xa > xb) result = attack(character, say, view_count, combat_log, boss);
+				else if(xb > xa) result = enemyAct(character, say, combat_log, boss);
+				else if(Math.random() < 0.5) result = attack(character, say, view_count, combat_log, boss);
+				else result = enemyAct(character, say, combat_log, boss);
+			
+				//Checa se alguem ganhou
 				if(result){
 					if(result.result == "win"){
 						speech += character.display_name + " matou " + enemy.display_name.toUpperCase() +"! Ele ganhou " + result.exp + " pontos de experiência e " + result.cns + " moedas! ("+result.view_bonus+"% BONUS!) -- Gostaria de ver o log de batalha? use o comando >log";
@@ -104,8 +115,13 @@ function engageCombat(character, say, view_count, enemy, boss){
 						delete combats[character.twitch_id];
 						break;
 					}
-				} //o próprio attack chama o enemy act
-				rounds++;
+				}
+				
+				xa -= dim;
+				xb -= dim;
+
+				if(xa <= 0) xa += character.getAttribute("velocity");
+				if(xb <= 0) xb += enemy.velocity;
 			}
 			if(rounds == 30) speech += character.display_name + " demorou muito para matar o inimigo, e ele fugiu";
 			say(speech);
@@ -251,9 +267,7 @@ function attack(character, say, view_count, combat_log, boss){
 				"view_bonus": view_bonus
 			};
 		}
-		else{
-			return enemyAct(character, say, combat_log, boss);
-		}
+		
 	}
 }
 

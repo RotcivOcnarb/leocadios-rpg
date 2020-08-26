@@ -63,26 +63,36 @@ function generateItem(name, slot, level, thumbnail, desc){
 	}
 }
 
-const armors = require("./data/armors.json");
-const weapons = require("./data/weapons.json");
-const consumables = require("./data/consumables.json");
+let va, vb, xa, xb;
 
-for(var a in Object.keys(armors)){
-	let key = Object.keys(armors)[a];
-	let armor = armors[key];
-	
-	armor.shop_price = Math.floor(Math.pow(armor.level, 1.3) * 100 * (Math.random() * 0.2 - 0.1 + 1));
-	armors[key] = armor;
+va = 100;
+vb = 60;
+
+//////////
+
+xa = va;
+xb = vb;
+
+// começa a iteração
+for(var i = 0; i < 30; i ++){
+	let dim = Math.min(xa, xb);
+	if(xa > xb){
+		console.log("ROUND DO A | xa: " + xa + " - xb: " + xb);
+	}
+	else if(xb > xa){
+		console.log("ROUND DO B | xa: " + xa + " - xb: " + xb);
+	}
+	else{
+		console.log("PARRY");
+	}
+
+	xa -= dim;
+	xb -= dim;
+
+	if(xa <= 0) xa += va;
+	if(xb <= 0) xb += vb;
 }
 
-fs.writeFile("data/armors.json", JSON.stringify(armors, null, 2), ()=> console.log("Armors"));
 
-for(var a in Object.keys(weapons)){
-	let key = Object.keys(weapons)[a];
-	let weapon = weapons[key];
-	
-	weapon.shop_price = Math.floor(Math.pow(weapon.level, 1.3) * 100 * (Math.random() * 0.2 - 0.1 + 1));
-	weapons[key] = weapon;
-}
 
-fs.writeFile("data/weapons.json", JSON.stringify(weapons, null, 2), ()=> console.log("Weapon"));
+

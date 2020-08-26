@@ -23,11 +23,8 @@ if(environment == "production"){
 			dropbox.updateFile("streamers.json", "[]");
 			return;
 		}
-		
-		for(s in st){
-			console.log("Inicializando para o streamer: " + st[s]);
-			bot(environment, st[s]);
-		}
+		console.log("Inicializando para os streamers: " + st);
+		bot(st);
 	});
 
 }
@@ -40,7 +37,7 @@ else{
 			return;
 		}
 
-		bot(environment, "rotcivocnarb");
+		bot(["rotcivocnarb"]);
 	});
 }
 
@@ -50,9 +47,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/personagem", (req, res) => {
 	
-	if(req.query["id"] && req.query["env"] && req.query["streamer"]){
+	if(req.query["id"] && req.query["streamer"]){
 		let twitch_id = req.query["id"];
-		let allCharacters = database.getAllCharacters(req.query["env"], req.query["streamer"]);
+		let allCharacters = database.getAllCharacters(req.query["streamer"]);
 		
 		if(allCharacters[twitch_id]){
 			res.render("character", {

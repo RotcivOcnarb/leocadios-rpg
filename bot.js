@@ -11,11 +11,13 @@ const commands = require("./commands");
 const dropbox = require("./drive_api");
 const rewards = require("./rewards");
 
-function init(environment, streamer){
+let whisper_stream_obj = {};
+
+function init(streamers){
 	
 	const options = {
 		"display_names": {},
-		"view_count": 0,
+		"view_count": {},
 		"lastActivity": {},
 	}
 	
@@ -25,7 +27,7 @@ function init(environment, streamer){
 		username: "RotsBots",
 		password: "oauth:o8ut98dsvn59t5hqynkhlm6o4x8yz6"
 	  },
-	  channels: [ streamer ]
+	  channels: [...streamers]
 	};
 
 	// Create a client with our options
@@ -38,82 +40,89 @@ function init(environment, streamer){
 	}
 
 	// Register our event handlers (defined below)
-	client.on('message', (ch, co, m, s) => onMessageHandler(ch, co, m, s, environment, streamer, options));
+	client.on('message', (ch, co, m, s) => onMessageHandler(ch, co, m, s, options));
 	client.on('connected', onConnectedHandler);
-	client.on('cheer', (ch, co, m) => onCheerHandler(ch, co, m, environment, streamer));
-
-	database.loadDatabase(environment, streamer);
+	client.on('cheer', onCheerHandler);
 
 	// Connect to Twitch:
 	client.connect();
 
-	setInterval(() => database.saveDatabase(environment, streamer), 1000 * 30); //Salva os dados a cada 30 segundos
-	setInterval(() => {	//Atualiza a contagem de views a cada 20 segundos
-		twitch.getLiveViewCount((count) => {
-			options.view_count = count;
-		}, streamer);
-	}, 20 * 1000);
-
-	/* AVISO PRA DAR AOS VIEWERS
-
-	Alguns sistemas automaticos requerem que o usuÃ¡rio esteja ativo na live, por isso, se vocÃª ficar sem comentar nada por mais de 5 minutos, mesmo que esteja vendo a live, o sistema vai identificar que vocÃª estÃ¡ OFFLINE, e nÃ£o vai te dar alguns bonus:
-
-	- RecuperaÃ§Ã£o de vida
-
-	*/
-
-	setInterval( () => {
-		//Aumenta a vida de todo mundo a cada 10 segundos se ele nÃ£o estiver em combate, e ele estiver na live
-		let allCharacters = database.getAllCharacters(environment, streamer);
+	for(st in streamers){
+		let streamer = streamers[st];
+		database.loadDatabase(streamer);
+		options.view_count[streamer] = 0;
+		setInterval(() => database.saveDatabase(streamer), 1000 * 30); //Salva os dados a cada 30 segundos
+		setInterval(() => {	//Atualiza a contagem de views a cada 20 segundos
+			twitch.getLiveViewCount((count) => {
+				options.view_count[streamer] = count;
+			}, streamer);
+		}, 20 * 1000);
 		
-		for(var i in Object.keys(allCharacters)){
-			var k = Object.keys(allCharacters)[i];
-			var ch = allCharacters[k];
+		setInterval( () => {
+			//Aumenta a vida de todo mundo a cada 10 segundos se ele não estiver em combate, e ele estiver na live
+			let allCharacters = database.getAllCharacters(streamer);
 			
-			if(!combat.isPlayerInCombat(ch)){
-				if(options.lastActivity[ch.twitch_id] && (Date.now() - options.lastActivity[ch.twitch_id]) < 1000 * 60 * 5){
-					ch.health += (0.1 * ch.getAttribute("max_health"));
-					ch.health = Math.min(Math.floor(ch.health), ch.getAttribute("max_health"));
+			for(var i in Object.keys(allCharacters)){
+				var k = Object.keys(allCharacters)[i];
+				var ch = allCharacters[k];
+				
+				if(!combat.isPlayerInCombat(ch)){
+					if(options.lastActivity[ch.twitch_id] && (Date.now() - options.lastActivity[ch.twitch_id]) < 1000 * 60 * 5){
+						ch.health += (0.1 * ch.getAttribute("max_health"));
+						ch.health = Math.min(Math.floor(ch.health), ch.getAttribute("max_health"));
+					}
 				}
 			}
-		}
-		
-	}, 30 * 1000);
-
+			
+		}, 30 * 1000);
+	}
 }
 
 // Called every time a message comes in
-async function onMessageHandler (channel, context, msg, self, environment, streamer, options) {
+async function onMessageHandler (channel, context, msg, self, options) {
 	if(self && msg == ">botid") console.log(JSON.stringify(context, null, 2));
 	if (self) { return; } // Ignore messages from the bot
+	let streamer = channel.substring(1, channel.length);
+	
+	//Checa se a msg tá vindo do whisper
+	if(!context['room-id']){
+		streamer = whisper_stream_obj[context['user-id']];
+		if(!streamer){
+			client.whisper(context['username'], "Você não está cadastrado em nenhum canal! Use o comando >criar_personagem no chat da twitch do seu streamer com o BOT");
+			return;
+		}
+	}
+	
   	options.display_names[context["user-id"]] = context['display-name'];
 	options.lastActivity[context["user-id"]] = Date.now();
 	if(msg == ">context") console.log(JSON.stringify(context, null, 2));
 	
-	if(msg.startsWith(">"))
+	if(msg.startsWith(">")){
+		whisper_stream_obj[context['user-id']] = streamer;
 		commands.query(
 			msg.substring(1, msg.length).split(" "),
 			context,
-			(msg) => client.say(channel, msg),
-			environment,
+			(msg) => options.client.whisper(context['display-name'], msg),
 			streamer,
-			options.view_count);
+			options.view_count[streamer]
+		);
+	}
 	
   
 	if(context["custom-reward-id"])
-		rewards.query(context["custom-reward-id"], (msg) => client.say(channel, msg), context, environment, streamer);
+		rewards.query(context["custom-reward-id"], (msg) => options.client.say(channel, msg), context, environment, streamer);
 	
 }
 
 
 function onCheerHandler(channel, context, message){
-	
-	let character = database.retrieveCharacterData(context["user-id"], environment, streamer);
+	let streamer = channel.substring(1, channel.length);
+	let character = database.retrieveCharacterData(context["user-id"], streamer);
 	options.lastActivity[context["user-id"]] = Date.now();
 
 	if(character){
 		character.morcs += context.bits;
-		client.say(channel, character.display_name + " acaba de receber " + bits + " Morcs por ter doado bits pro canal!!! Obrigado!");
+		options.client.say(channel, character.display_name + " acaba de receber " + bits + " Morcs por ter doado bits pro canal!!! Obrigado!");
 	}
 }
 

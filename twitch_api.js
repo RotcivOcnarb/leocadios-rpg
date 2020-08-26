@@ -86,7 +86,8 @@ function _getLive(access_token, streamer, callback){
 		});
 		response.on('end', () => {
 			let json = JSON.parse(body);
-			callback(json.data[0]);
+			if(json.data.length == 0) callback();
+			else callback(json.data[0]);
 		});
 	});
 

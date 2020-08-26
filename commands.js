@@ -178,7 +178,7 @@ let funcs = {
 	//Luta contra o boss do mundo
 	boss: {
 		character: true,
-		exec: (o) => combat.engageCombatWithBoss(o.character, say, o.view_count)
+		exec: (o) => combat.engageCombatWithBoss(o.character, o.say, o.view_count)
 	},
 	
 	//Se tiver no meio de uma batalha, desiste dela

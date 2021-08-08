@@ -37,7 +37,7 @@ else{
 			return;
 		}
 
-		bot(["rotcivocnarb"]);
+		bot(["rotsrots"]);
 	});
 }
 

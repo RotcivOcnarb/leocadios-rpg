@@ -103,14 +103,14 @@ let funcs = {
 	//Manda o link da pagina do personagem
 	personagem: {
 		character: true,
-		exec: (options) => options.say(`Para ver os status do personagem de ${options.character.display_name}, acesse esse link: {host}/personagem/?id=${options.character.twitch_id}&streamer=${options.streamer}`)
+		exec: (options) => options.say(`Para ver os status do personagem de ${options.character.display_name}, acesse esse link: ${host}/personagem/?id=${options.character.twitch_id}&streamer=${options.streamer}`)
 	},
 	
 	/* == COMANDOS INFORMATIVOS == */
 	
 	//Manda o link da loja
 	loja: {
-		exec: (options) => options.say("A loja pode ser acessada por esse link: {host}/shop")
+		exec: (options) => options.say("A loja pode ser acessada por esse link: ${host}/shop")
 		
 	},
 	

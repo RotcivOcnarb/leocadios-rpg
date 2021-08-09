@@ -16,9 +16,7 @@ function getFile(filename, callback){
 			})
 		}
 	};
-	
-	console.log("DRIVE AUTH: " + opts.headers["Authorization"]);
-	
+		
 	let req = https.request(opts, function(res){
 		res.setEncoding('utf8');
 		let dt = "";

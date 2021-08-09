@@ -2,9 +2,6 @@ const https = require("https");
 
 function getFile(filename, callback){
 	
-	console.log("PROCESS.ENV");
-	console.log(JSON.stringify(process.env, 2, 2));
-	
 	let hostname = "content.dropboxapi.com";
 	let path = "/2/files/download";
 	

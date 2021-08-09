@@ -5,7 +5,7 @@ const worlds = require("./data/worlds.json");
 const shop = require("./data/shop.json");
 const seedrandom = require("seedrandom");
 
-let host = "rotciv.dev.br";
+let host = "http://rotciv.dev.br";
 
 function perm(command, context){
 	if(command.role){

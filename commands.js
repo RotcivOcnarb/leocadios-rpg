@@ -5,6 +5,8 @@ const worlds = require("./data/worlds.json");
 const shop = require("./data/shop.json");
 const seedrandom = require("seedrandom");
 
+let host = "rotciv.dev.br";
+
 function perm(command, context){
 	if(command.role){
 		if(command.role == "mod") return context.mod || (context.badges && context.badges.broadcaster == "1");
@@ -101,14 +103,14 @@ let funcs = {
 	//Manda o link da pagina do personagem
 	personagem: {
 		character: true,
-		exec: (options) => options.say(`Para ver os status do personagem de ${options.character.display_name}, acesse esse link: https://leocadios-rpg.herokuapp.com/personagem/?id=${options.character.twitch_id}&streamer=${options.streamer}`)
+		exec: (options) => options.say(`Para ver os status do personagem de ${options.character.display_name}, acesse esse link: {host}/personagem/?id=${options.character.twitch_id}&streamer=${options.streamer}`)
 	},
 	
 	/* == COMANDOS INFORMATIVOS == */
 	
 	//Manda o link da loja
 	loja: {
-		exec: (options) => options.say("A loja pode ser acessada por esse link: https://leocadios-rpg.herokuapp.com/shop")
+		exec: (options) => options.say("A loja pode ser acessada por esse link: {host}/shop")
 		
 	},
 	

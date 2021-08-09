@@ -3,6 +3,7 @@ const https = require("https");
 //PEGA O ACCESS TOKEN;
 
 let access_token = "";
+let twitch_token = process.env.TWITCH_SECRET;
 
 function getLiveViewCount(callback, streamer){
 	
@@ -25,7 +26,7 @@ function getLiveViewCount(callback, streamer){
 function request_access_token(callback){
 	let req = https.request({
 		host: "id.twitch.tv",
-		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret=bjbu4xo5ib508mebsth83mx6jij0bw&grant_type=client_credentials",
+		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret="+twitch_token+"&grant_type=client_credentials",
 		method: "POST",
 	}, function(response){
 		let body = "";

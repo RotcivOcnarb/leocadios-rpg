@@ -1,6 +1,6 @@
 const https = require("https");
 
-let accessToken = "jIU24EnHl28AAAAAAAAAAbMgEIHDytA-cjIOXKbrMVI0KA4yd-lJZhZjDVqN82kx";
+let accessToken = process.env.DRIVE_TOKEN;
 
 function getFile(filename, callback){
 	let hostname = "content.dropboxapi.com";

@@ -76,19 +76,6 @@ app.get("/shop", (req, res) => {
 	});
 });
 
-app.get("/ping", (req, res) => {
-	
-	console.log("PING received, sending pong...");
-	
-	https.request({
-		hostname: "rpg-ping-pong.herokuapp.com",
-		path: "/pong",
-		method: "GET"
-	}, r => console.log("pong sent code: " + r.statusCode)).end();	
-	
-	res.send();
-});
-
 app.get("/addbot", (req, res) => {
 	
 	res.render("button", {
@@ -120,7 +107,7 @@ app.get("/subupdated", (req, res) => {
 	
 	https.request({
 		hostname: "id.twitch.tv",
-		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret=bjbu4xo5ib508mebsth83mx6jij0bw&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
+		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret="+process.env.TWITCH_SECRET+"&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
 		method: "POST"
 	}, (r) => {
 		console.log(r.statusCode);		
@@ -165,7 +152,7 @@ app.get("/subupdated", (req, res) => {
 							});
 						}
 						res.render("message", {
-							message: "Seu canal não tem o bot! Acesse <a href='https://leocadios-rpg.herokuapp.com/addbot'>esse link</a> para adicionar o bot ao seu canal"
+							message: "Seu canal não tem o bot! Acesse <a href='http://rotciv.dev.br/addbot'>esse link</a> para adicionar o bot ao seu canal"
 						});
 					});
 					;
@@ -182,7 +169,7 @@ app.get("/authorize", (req, res) => {
 	
 	https.request({
 		hostname: "id.twitch.tv",
-		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret=bjbu4xo5ib508mebsth83mx6jij0bw&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
+		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret="+process.env.TWITCH_SECRET+"&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
 		method: "POST"
 	}, (r) => {
 		console.log(r.statusCode);		
@@ -244,7 +231,7 @@ app.get("/removesuccess", (req, res) => {
 	
 	https.request({
 		hostname: "id.twitch.tv",
-		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret=bjbu4xo5ib508mebsth83mx6jij0bw&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
+		path: "/oauth2/token?client_id=mfko21ti9vhpzbpkgbb7lse4yxl7cu&client_secret="+process.env.TWITCH_SECRET+"&code="+req.query["code"]+"&grant_type=authorization_code&redirect_uri=http://localhost/",
 		method: "POST"
 	}, (r) => {
 		console.log(r.statusCode);		

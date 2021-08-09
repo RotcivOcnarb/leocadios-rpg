@@ -2,6 +2,10 @@ const https = require("https");
 
 let accessToken = process.env.DRIVE_TOKEN;
 
+console.log("drive all env: ");
+console.log(JSON.parse(process.env, 2));
+console.log(accessToken);
+
 function getFile(filename, callback){
 	let hostname = "content.dropboxapi.com";
 	let path = "/2/files/download";

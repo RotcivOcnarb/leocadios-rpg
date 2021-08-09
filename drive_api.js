@@ -1,11 +1,5 @@
 const https = require("https");
 
-let accessToken = process.env.DRIVE_TOKEN;
-
-console.log("drive all env: ");
-console.log(JSON.parse(process.env, 2));
-console.log(accessToken);
-
 function getFile(filename, callback){
 	let hostname = "content.dropboxapi.com";
 	let path = "/2/files/download";
@@ -15,7 +9,7 @@ function getFile(filename, callback){
 		path: path,
 		method: 'POST',
 		headers: {
-			"Authorization": "Bearer " + accessToken,
+			"Authorization": "Bearer " + process.env.DRIVE_TOKEN,
 			"Dropbox-API-Arg": JSON.stringify({
 				"path": "/" + filename
 			})
@@ -46,7 +40,7 @@ function updateFile(filename, contents, callback){
 		path: path,
 		method: 'POST',
 		headers: {
-			"Authorization": "Bearer " + accessToken,
+			"Authorization": "Bearer " + process.env.DRIVE_TOKEN,
 			"Content-Type": "text/plain; charset=dropbox-cors-hack",
 			"Dropbox-API-Arg": JSON.stringify({
 				"path": "/" + filename,

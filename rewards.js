@@ -4,7 +4,13 @@ const dropbox = require("./drive_api");
 let rewards = {};
 
 dropbox.getFile("rewards.json", (contents) => {
-	rewards = JSON.parse(contents);
+	try{
+		rewards = JSON.parse(contents);
+	}
+	catch{
+		console.log("Could not parse JSON for contents: ");
+		console.log(contents);
+	}
 });
 
 

@@ -6,7 +6,7 @@ function getFile(filename, callback){
 	let hostname = "content.dropboxapi.com";
 	let path = "/2/files/download";
 	
-	let req = https.request({
+	let opts = {
 		hostname: hostname,
 		path: path,
 		method: 'POST',
@@ -16,8 +16,11 @@ function getFile(filename, callback){
 				"path": "/" + filename
 			})
 		}
-		
-	}, function(res){
+	};
+	
+	console.log("DRIVE AUTH: " + opts.headers["Authorization"]);
+	
+	let req = https.request(opts, function(res){
 		res.setEncoding('utf8');
 		let dt = "";
 		res.on('data', (chunk) => {
